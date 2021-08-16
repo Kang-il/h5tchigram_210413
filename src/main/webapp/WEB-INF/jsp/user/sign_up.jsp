@@ -38,6 +38,11 @@
 		<div class="sign-up-item-box mt-2">
 			<input type="password" class="form-control col-10 sign-input" id="signUpPassword" placeholder="비밀번호">
 		</div>
+		
+		<div class="justify-content-center d-none" id="passwordValidationCheck">
+			<span class="validation-text text-center  ml-0">비밀번호는 6-20자리로 문자,숫자,특수문자를 <br>최소 한 개 이상씩 포함해야 합니다.</span>
+		</div>
+		
 		<div class="sign-up-item-box">
 			<button type="button" class="mt-4 col-10 sign-btn" id=signUpBtn disabled>가입</button>
 		</div>
