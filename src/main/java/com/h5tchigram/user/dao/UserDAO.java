@@ -9,4 +9,6 @@ import com.h5tchigram.user.model.User;
 public interface UserDAO {
 	public User selectUserByLoginId(@Param("loginId") String loginId);
 	public Integer insertUser(User user);
+	public User selectUserByLoginIdAndPassword(@Param("loginId") String loginId
+											  ,@Param("password") String password);
 }

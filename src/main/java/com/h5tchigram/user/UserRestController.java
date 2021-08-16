@@ -3,6 +3,9 @@ package com.h5tchigram.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +53,33 @@ public class UserRestController {
 				result.put("result", true);
 			}
 			
+		return result;
+	}
+	
+	@PostMapping("/sign_in")
+	public Map<String,Boolean> signIn(@RequestParam("loginId")String loginId
+									 ,@RequestParam("password")String password
+									 ,HttpServletRequest request){
+
+		Map<String,Boolean> result=new HashMap<>();		
+		//password hashing
+		String encryptedPassword=EncryptUtils.mb5(password);
+		
+		//DB 연동 입력된 아이디 비밀번호와 일치하는 개체가 있는지 확인
+		User user = userBO.getUserByLoginIdAndPassword(loginId, encryptedPassword);
+		
+		if(user!=null) {
+			HttpSession session=request.getSession();
+			//로그인 성공시 user 객체를 session에 담겠다.
+			session.setAttribute("user", user);
+			//성공시 true 값 저장
+			result.put("result",true);
+		}else {
+			//실패시 false값 저장
+			result.put("result", false);
+		}
+		
+		
 		return result;
 	}
 	

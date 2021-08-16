@@ -9,15 +9,17 @@
 			</div>
 			
 			<div class="sign-in-item-box mt-5">
-				<input type="text" class="form-control col-10 sign-input" placeholder="전화번호,사용자의 이름 또는 이메일">
+				<input type="text" class="form-control col-10 sign-input" placeholder="전화번호,사용자의 이름 또는 이메일" id="loginId">
 			</div>
 			
 			<div class="sign-in-item-box mt-2">
-				<input type="password" class="form-control col-10" placeholder="비밀번호">
+				<input type="password" class="form-control col-10" placeholder="비밀번호" id="loginPassword">
 			</div>
-		
+			<div class="login-alert-box d-none">
+				<span class="text-danger">아이디 비밀번호를 확인 해 주세요.</span>
+			</div>
 			<div class="sign-in-item-box">
-				<button class="mt-4 col-10 sign-btn" onclick="location.href='/post/timeline_view'">로그인</button>
+				<button type="button" class=" col-10 sign-btn" id="loginBtn" disabled>로그인</button>
 			</div>
 			<div class="sign-in-item-box mt-3 text-secondary">
 				<div>―――――――</div>

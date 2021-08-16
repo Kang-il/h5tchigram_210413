@@ -2,6 +2,9 @@ package com.h5tchigram.user;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,4 +30,10 @@ public class UserController {
 		return "template/user_sign_layout";
 	}
 	
+	@RequestMapping("/sign_out")
+	public String signOut(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		session.invalidate();
+		return "redirect:/user/sign_in_view";
+	}
 }
