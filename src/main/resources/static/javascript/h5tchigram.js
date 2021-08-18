@@ -88,8 +88,67 @@
 				}
 			});//중복확인ajax끝
 		}
+		
+	//로그인 function
+	function signIn(){
+				
+		let loginId=$('#loginId').val().trim();
+		let password=$('#loginPassword').val().trim();
+		
+		//아이디가 비어있는경우 경고문 
+		if(loginId==''){
+			$('.login-alert-box').removeClass('d-none');
+			return;
+		}
+		//비밀번호가 비어있는 경우 경고문			
+		if(password==''){
+			$('.login-alert-box').removeClass('d-none');
+			return;
+		}
+		
+		//아이디와 비밀번호로 DB연동하여 일치여부 확인 		
+		$.ajax({
+			type:'POST'
+			,url:'/user/sign_in'
+			,data:{'loginId':loginId,'password':password}
+			,success:function(data){
+				if(data.result===true){
+					//성공시 타임라인 페이지로 이동시킨다.
+					location.href="/timeline/timeline_view";
+				}else{
+					//로그인 실패시 경고창 발생
+					$('.login-alert-box').removeClass('d-none');
+				}
+			}
+			,error:function(e){
+				alert(e);
+			}
+		});
+	}	
 	
-	
+ 	//모달창 종료 (게시글 메뉴창에 취소버튼을 눌렀을 경우)
+	function cancelModal(){
+		$('.menu-modal-section').addClass('d-none');
+		$('.comment-description-modal').addClass('d-none');
+		$('body').removeClass('no-scrollbar');
+ 	}
+
+ 	//emoji picker 메서드
+ 	function setPicker(buttonId,inputClass){
+		const picker = new EmojiButton({
+				position:'top'
+		});		
+		const button = document.querySelector(buttonId);			
+		picker.togglePicker(button);
+					
+		//z-index 추가해서 맨 앞으로 나오도록 하기
+		$('.wrapper').css('z-index',10);		
+		picker.on('emoji',emoji=>{
+			let comment =$(inputClass).val()+emoji;
+			$(inputClass).val(comment);
+			return;
+		});
+	}
 
 $(document).ready(function(){
 	
@@ -137,7 +196,39 @@ $(document).ready(function(){
 		signUp();	
 	});
 	
+	//::::::::::::::Sign_IN 
+	
+	//로그인 패스워드 창 감지하여 값이 모두 입력되어있지 않으면 버튼 비활성화 시킬 것
+	//keyup 이나 keydown으로 이벤트를 가져오면 알림div나 버튼의 비활성화가 적절하게 이루어지지 않았다.
+	$('#loginId , #loginPassword').on('input',function(e){
 
+		$('.login-alert-box').addClass('d-none');
+		let loginId=$('#loginId').val().trim();
+		let password=$('#loginPassword').val().trim();
+				
+		if(loginId!='' && password!=''){
+			$('#loginBtn').attr('disabled',false);
+		}else{
+			$('#loginBtn').attr('disabled',true);
+		}
+	});
+	
+	//로그인 버튼 클릭 시 로그인 function 실행
+	$('#loginBtn').on('click',function(e){
+				e.preventDefault();
+				signIn();
+	});
+	
+	//id input password input에 focus된 상태에서 엔터키를 누를 경우 로그인 function 실행		
+	$('#loginId,#loginPassword').keypress(function(key){
+		if(key.keyCode==13){
+			if($('#loginBtn').attr('disabled')!='disabled'){
+				signIn();
+			}
+		}
+	});
+
+	
 });
 
 
