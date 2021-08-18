@@ -227,7 +227,113 @@ $(document).ready(function(){
 			}
 		}
 	});
+	
+	//모달창 외부 영역 클릭 시 모달창 꺼지기
+	$('.create-post-item-modal-section').on('click',function(e){
+		if(!$('.create-post-item-modal-box').has(e.target).length){
+			$('.create-post-item-modal-section').addClass('d-none');
+			$(".zoom-in-simple-info").removeClass("d-none");
+			$('body').removeClass('no-scrollbar');
+		}
+	});
 
+	$('.profile-btn').on('focus',function(){
+		$('.nav-profile-modal').removeClass('d-none');
+		$('#userInfoSection').addClass('user-info-set-z-index');
+		$('.modal-window').removeClass('d-none');
+		$('.nav-alert-modal').addClass('d-none');
+	});
+
+	$('.modal-window').on('click',function(){
+		$('.nav-profile-modal').addClass('d-none');
+		$('#userInfoSection').removeClass('user-info-set-z-index');
+		$('.modal-window').addClass('d-none');
+		$('.nav-alert-modal').addClass('d-none');
+	});
+	
+	$('.alert-item').on('focus',function(){
+		$('.nav-alert-modal').removeClass('d-none');
+		$('#userInfoSection').addClass('user-info-set-z-index');
+		$('.modal-window').removeClass('d-none');
+		$('.nav-profile-modal').addClass('d-none');
+	});
+	
+	$('.post-menu-btn').on('focus',function(){
+		$('.menu-modal-section').removeClass('d-none');
+		$('.detail-info').addClass('d-none');
+		$('body').addClass('no-scrollbar');
+
+	});
+	
+	$('.menu-modal-section').on('click',function(e){
+		if(!$('.menu-modal-box').has(e.target).length){
+			$('.menu-modal-section').addClass('d-none');
+			$('.detail-info').removeClass('d-none');
+			//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
+			if($('.comment-modal-section').hasClass('d-none')===true){ 
+				$('body').removeClass('no-scrollbar');
+			}
+		}
+	});
+	
+	$('.menu-btn').on('focus',function(){
+		$('.comment-description-modal').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+
+	});
+	
+	$('.comment-description-modal').on('click',function(e){
+		if(!$('.menu-modal-box').has(e.target).length){
+			
+			$('.comment-description-modal').addClass('d-none');
+			//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
+			if($('.comment-modal-section').hasClass('d-none')===true){ 
+				$('body').removeClass('no-scrollbar');
+			}
+		}
+	});
+	
+	$('#showDetail').on('focus',function(){
+		$('.comment-modal-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+
+	});
+	
+	$('.comment-modal-section').on('click',function(e){
+		if(!$('.comment-modal-box').has(e.target).length){
+			
+			$('.comment-modal-section').addClass('d-none');
+			$('.content-simple-info').removeClass('d-none');
+			$('body').removeClass('no-scrollbar');
+			
+		}
+	});
+	
+	$('.action-text-focus-btn').on('click',function(){
+		$('.modal-comment-form').focus();
+	});
+	
+	$('.detail-section-focus-btn').on('click',function(){
+		$('.detail-comment-form').focus();
+	});
+	
+
+			
+	//1.타임라인 이모지피커
+	$('.timeline-emoji-picker').on('click',function(){
+		let buttonId='#post-emoji-picker';
+		let inputClass=".comment-form";
+		//이모지 피커 함수 호출
+		setPicker(buttonId,inputClass);
+	});
+	
+	//2.모달창 이모지피커
+	$('.item-emoji-picker').on('click',function(){
+		let buttonId='#modal-emoji-picker';
+		let inputClass=".modal-comment-form";
+		//이모지 피커 함수 호출
+		setPicker(buttonId,inputClass);
+	});
 	
 });
 

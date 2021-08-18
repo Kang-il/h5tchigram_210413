@@ -3,6 +3,21 @@ body{
 	background-color: #fafafa;overflow: scroll;
 }
 
+.no-scrollbar{
+	overflow:hidden;
+}
+
+.wrapper{
+	transform:none;
+}
+
+.material-icons-outlined{
+	width:30px;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+
 header{
 	height:54px;
 	position: fixed;
@@ -682,6 +697,266 @@ header .header-nav-box .icon-item{
 	border: none;
     outline:none;
     background-color: #7dc8f8;
+}
+
+.comment-description-modal{
+	width:100%; height:100%;
+	background:rgba(0,0,0,0.5);
+	position: fixed ;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	z-index: 4;
+}
+
+.comment-description-modal .menu-modal-box{
+	width:370px;
+	border-radius:10px;
+	background-color: white;
+	position:fixed;
+	z-index: 5;
+}
+
+.comment-description-modal div{
+	text-align: center;
+}
+
+.comment-description-modal .menu-modal-box .modal-menu-item{
+	color: black;
+	font-size: 14px;
+	width:100%;
+	height:50px;
+	display: flex;
+	align-items: center;
+	justify-content:center;
+}
+
+.comment-description-modal .menu-modal-box .cancel-modal{
+	cursor: pointer;
+}
+
+.comment-description-modal .menu-modal-box hr{
+	margin:0;
+}
+
+.comment-description-modal .menu-modal-box .modal-menu-item a{
+	width:370px;
+	color:black;
+}
+
+.comment-description-modal .menu-modal-box .modal-menu-item a:hover{
+	text-decoration: none;
+}
+
+.comment-modal-section{
+	width:100%; height:100%;
+	background:rgba(0,0,0,0.5);
+	position: fixed ;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	z-index: 3;
+}
+
+
+.comment-modal-box{
+	width:950px;
+	height:600px;
+	background-color: white;
+	display: flex;	
+}
+
+
+
+.comment-modal-description{
+	width:350px;
+}
+
+.comment-modal-description .comment-modal-des1{
+	height:80px;
+	padding: 13px;
+	display: flex;
+	align-items: center;
+}
+
+.comment-modal-des1 .user-profile{
+	border-radius:70%;
+	width:50px;
+	border: 1px #dbdbdb double;
+	padding:2px;
+}
+
+.comment-modal-des1 .user-id{
+	margin-left:10px;
+	color: black;
+	font-weight: 700;
+}
+
+.comment-modal-des1 .post-menu-btn{
+	background-color: rgba( 255, 255, 255, 0 );
+	width:200px;
+	border:none;
+	outline:none;
+	display: flex;
+	justify-content: flex-end;
+	cursor: pointer;
+}
+
+.comment-modal-description .comment-modal-des2{
+	height:365px;
+	overflow-y:scroll;
+
+}
+
+.comment-modal-des2 span{
+	font-size:15px;
+	margin-left:8px;
+}
+
+.comment-modal-des2 .description-item{
+	margin:15px 0 15px 15px;
+}
+
+.comment-modal-des2 .comment-item{
+	margin:15px 0 15px 15px;
+	display: flex;
+	align-items: center;
+	justify-content:space-between;
+}
+
+.comment-item button{
+	background-color: rgba( 255, 255, 255, 0 );
+	border:none;
+	outline:none;
+	cursor: pointer;
+	font-size:15px;
+}
+
+.comment-modal-des2 .user-profile{
+	width:50px;
+	border-radius: 70%;
+	border: 1px #dbdbdb double;
+	padding:2px;
+}
+
+.comment-modal-des2 .comment-id {
+	font-size:13px;
+	color:black;
+	font-weight: 700;
+}
+
+.comment-modal-des2 span{
+	font-size:13px;
+	color:black;	
+}
+
+.comment-modal-description .comment-modal-des3{
+	height:108px;
+}
+
+.comment-modal-des3 {
+	font-size:13px;
+}
+
+.comment-modal-des3 .action-button{
+	display: flex;
+	align-items: center;
+}
+
+.comment-modal-des3 .action-button button{
+	color:#393939;
+	margin-top:8px;
+	margin-left:3px;
+	font-size:30px;
+	width:35px;
+	border: none;
+	outline: none;
+	background-color: rgba( 255, 255, 255, 0 );
+	cursor: pointer; 	
+}
+
+.comment-modal-des3 .action-button button:nth-child(1){
+	margin-left:10px;
+}
+
+.comment-modal-des3 .action-button button:nth-child(2){
+	color:#ed4956;	
+	font-size:30px;
+	margin-left:10px;
+}
+
+.comment-modal-des3 .item-like-section{
+	margin-top:5px;
+}
+
+.comment-modal-des3 .item-like-section .like-profile{
+	width:24px;
+	border-radius: 70%;
+	margin-left: 18px;
+}
+
+.comment-modal-des3 .item-like-section .like-first-id{
+	color:black;
+	font-weight:600;
+}
+
+.comment-modal-des3 .item-like-section .like-link{
+	color:black;
+	font-weight:600;
+}
+
+.comment-modal-des3 .post-date{
+	font-size:13px;
+	color:#b5b5b5;
+	margin-left:18px;
+	margin-top:10px;
+}
+
+.comment-modal-description .comment-modal-des4{
+	display:flex;
+	align-items:center;
+	height:45px;
+}
+
+.comment-modal-des4 .item-emoji-picker{
+	outline:none;
+	border:none;
+	cursor:pointer;
+	background-color:white;
+	font-size: 35px;
+	margin-left: 10px;
+	width:30px;
+}
+
+.comment-modal-des4 .btn-box{
+	width: 60px;
+	margin-left:30px;
+}
+
+.comment-modal-des4 .btn-box button{
+	font-size: 13px;
+	font-weight:700;
+	outline:none;
+	border:none;
+	cursor:pointer;
+	color: #0095f6;
+	background-color: rgba( 255, 255, 255, 0 );
+
+}
+
+.comment-modal-des4 input{
+	margin-left:15px;
+	border:none;
+	outline: none;
+	font-size: 13px;
+	width:220px;	
+	
 }
 
 footer .footer-item{

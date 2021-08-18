@@ -10,7 +10,7 @@
 	<div class="nav-box">
 	
 		<div class="header-logo-box">
-			<a href="/post/timeline_view"><img src="/static/images/logo.png" width="150px"/></a>
+			<a href="/timeline/timeline_view"><img src="/static/images/logo.png" width="150px"/></a>
 		</div>
 		<%-- 세션에 user값이 null 이 아니라면 로그인 되어있지 않은 것 --%>
 		<c:if test="${user ne null}">
@@ -56,7 +56,7 @@
 							</div>
 							
 							<div class="modal-nav-item">
-								<span class="material-icons-outlined">app_registration</span><a href="#">글 등록</a>
+								<span class="material-icons-outlined">app_registration</span><a href="/post/create_post_view">글 등록</a>
 							</div>
 							
 							<hr class="mb-2 mt-2">

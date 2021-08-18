@@ -24,8 +24,8 @@
 <jsp:include page="../include/modal.jsp"/>
 
 <section class="post-section">
-	<jsp:include page="../post/timeline_section.jsp"></jsp:include>
-	<jsp:include page="../user/user_info_section.jsp"></jsp:include>
+	<jsp:include page="../timeline/timeline_section.jsp"></jsp:include>
+	<jsp:include page="../timeline/timeline_user_info_section.jsp"></jsp:include>
 </section>
 
 

@@ -18,7 +18,7 @@
 			</div>
 			
 			<div class="post-item-picture-section">
-				<img src="/static/images/dummy_image.jpg" width="570px"/>
+				<img src="/static/images/dummy_image.jpg" width="569px" height="569px"/>
 			</div>
 			
 			<div class="post-item-action-button">
