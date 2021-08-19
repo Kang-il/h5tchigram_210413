@@ -149,7 +149,11 @@
 			return;
 		});
 	}
-
+	function deleteModal(commentId){
+			$('.comment-description-modal').removeClass('d-none');
+			$('.comment-delete-button').attr('href','/post/delete_comment?commentId='+commentId);
+			$('body').addClass('no-scrollbar');
+	}
 $(document).ready(function(){
 	
 	//::::::::::::::Sign_UP
@@ -228,6 +232,51 @@ $(document).ready(function(){
 		}
 	});
 	
+	//이미지 클릭시 이미지 크게보기
+	//사진 올리면 미리보기 가능하도록 하기
+	$("#createFileInput").on("change",function(e){
+
+		let files=e.target.files;
+		let filesArr=Array.prototype.slice.call(files);
+	
+		filesArr.forEach(function(f){
+			if(!f.type.match("image.*")){
+				alert("확장자는 이미지 확장자만 가능합니다.");
+				return;
+			}
+				
+			sel_file=f;
+				
+			let reader=new FileReader();
+			reader.onload=function(e){
+				$("#createPostImage").attr("src",e.target.result);
+				$("#createPostImage").removeClass("d-none");
+				$("#createPostImageFrame").addClass("d-none");
+				$(".zoon-in-photo-unit").removeClass("d-none");
+			}
+				
+			reader.readAsDataURL(f);
+				
+		});
+	});
+		
+	//trigger이용해서 사진추가 아이콘 클릭 시 숨겨놓은 input file 에 강제로 클릭하는 이벤트 삽입
+	$('#createPostAddImageBtn').on('click',function(){
+		$('#createPostImageFrame').trigger('click');
+	});
+		
+	//클릭시 모달창을 통해서 이미지 크게보기
+	$(".zoom-in-simple-info").on('click',function(){
+		$('.create-post-item-modal-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+		$(".zoom-in-simple-info").addClass("d-none");
+		//이미지 태그의 src값 받아오기
+			
+		let currentImagePath=$('#createPostImage').attr('src');
+		$('#PostingZoomInPhoto').attr('src',currentImagePath);
+
+	});
+	
 	//모달창 외부 영역 클릭 시 모달창 꺼지기
 	$('.create-post-item-modal-section').on('click',function(e){
 		if(!$('.create-post-item-modal-box').has(e.target).length){
@@ -276,11 +325,13 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('.menu-btn').on('focus',function(){
-		$('.comment-description-modal').removeClass('d-none');
-		$('body').addClass('no-scrollbar');
-
+	$('.comments-box').on('click','.menu-btn',function(){
+		
 	});
+	
+	
+	
+	
 	
 	$('.comment-description-modal').on('click',function(e){
 		if(!$('.menu-modal-box').has(e.target).length){
@@ -305,6 +356,7 @@ $(document).ready(function(){
 			$('.comment-modal-section').addClass('d-none');
 			$('.content-simple-info').removeClass('d-none');
 			$('body').removeClass('no-scrollbar');
+			$('.comments-box').empty();
 			
 		}
 	});
@@ -317,7 +369,42 @@ $(document).ready(function(){
 		$('.detail-comment-form').focus();
 	});
 	
-
+$('.profile-info-follow').on('click',function(){
+		$('.follow-modal-section').removeClass('d-none');
+		$('.content-simple-info').addClass('d-none');
+		$('body').addClass('no-scrollbar');
+	});
+	
+	$('.follow-modal-section').on('click',function(e){
+		if(!$('.follow-modal-box').has(e.target).length){
+			
+			$('.follow-modal-section').addClass('d-none');
+			$('.content-simple-info').removeClass('d-none');
+			$('body').removeClass('no-scrollbar');
+		}
+	});
+		
+	$('.follow-action-del-btn').on('click',function(){
+		$('.follow-delete-modal-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+	});
+		
+	$('.cancel-btn').on('click',function(){
+		$('.follow-delete-modal-section').addClass('d-none');
+	});
+		
+	$('.follow-delete-modal-section').on('click',function(e){
+		if(!$('.follow-delete-modal-box').has(e.target).length){
+			
+			$('.follow-delete-modal-section').addClass('d-none');
+		}
+	});
+	
+	$('.profile-content').on('click',function(){
+		$('.comment-modal-section').removeClass('d-none');
+		$('.content-simple-info').addClass('d-none');
+		$('body').addClass('no-scrollbar');
+	});
 			
 	//1.타임라인 이모지피커
 	$('.timeline-emoji-picker').on('click',function(){
@@ -334,6 +421,21 @@ $(document).ready(function(){
 		//이모지 피커 함수 호출
 		setPicker(buttonId,inputClass);
 	});
+	
+	//3.게시물로 이동 페이지 이모지 피커
+	$('.detail-emoji-picker').on('click',function(){
+		let buttonId='#detail-emoji-picker';
+		let inputClass=".detail-comment-form";
+
+		setPicker(buttonId,inputClass);
+	});
+	//4. 글 올리기 이모지피커
+	$('#postCreateEmojiPicker').on('click',function(){
+			let buttonId='#postCreateEmojiPicker';
+			let inputClass='.create-post-textarea';
+			//이모지 피커 함수 호출
+			setPicker(buttonId,inputClass);
+		});
 	
 });
 

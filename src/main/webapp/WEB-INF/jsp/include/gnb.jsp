@@ -38,13 +38,20 @@
 					</div>
 					
 					<div class="profile-item-box pb-1">
-						<button type="button" class="profile-btn"><img src="/static/images/dummy_profile.jpg" width="28px" class="profile-item "/></button>
+						<button type="button" class="profile-btn">
+							<c:if test="${user.profileImagePath eq null}">
+								<img src="/static/images/no_profile_image.png" width="28px" class="profile-item "/>
+							</c:if>
+							<c:if test="${user.profileImagePath ne null}">
+								<img src="${user.profileImagePath}" width="28px" class="profile-item "/>
+							</c:if>
+						</button>
 		
 						<div class="nav-profile-modal d-none">
 						
 							<div class="modal-nav-item">
 								<span class="material-icons-outlined modal-icon">account_circle</span>
-								<a href="#" id="profileLink">프로필</a>
+								<a href="/user/main_view?userId=${user.id}" id="profileLink">프로필</a>
 							</div>
 							
 							<div class="modal-nav-item">

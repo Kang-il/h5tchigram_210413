@@ -16,14 +16,7 @@ import com.h5tchigram.post.bo.PostBO;
 @RequestMapping("/post")
 public class PostController {
 	private Date date=new Date();
-	
-	@Autowired
-	private PostBO postBO;
-	@Autowired
-	private CommentBO commentBO;
-	@Autowired
-	private LikeBO likeBO;
-	
+
 	@RequestMapping("/post_detail_view")
 	public String postDetailView(Model model) {
 		model.addAttribute("currentTime",date.getTime());
