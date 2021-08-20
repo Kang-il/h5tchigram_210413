@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.h5tchigram.follow.bo.FollowBO;
 import com.h5tchigram.post.bo.PostBO;
 import com.h5tchigram.post.model.Post;
-import com.h5tchigram.user.bo.FollowBO;
 import com.h5tchigram.user.model.User;
 
 @RequestMapping("/post")
@@ -26,7 +26,39 @@ public class PostRestController {
 
 	@Autowired
 	private PostBO postBO;
+	@Autowired
+	private FollowBO followBO;
 	
+	
+	@RequestMapping("/get_post")
+	public Map<String,Object> getPost(@RequestParam("postId") int postId , HttpServletRequest request){
+		
+		
+		Map<String,Object> result=new HashMap<>();
+		
+		Post post =postBO.getPostById(postId);
+		
+		result.put("post", post);
+		
+		HttpSession session=request.getSession();
+		User user=(User)session.getAttribute("user");
+		
+		if(user!=null) {
+			result.put("loginCheck",true);
+			
+			//스택구조 후입선출 구조 이용
+			//제일 마지막에 자신을 넣음. pop을 통해 꺼내는 순간 자신의 아이디가 나옴
+			Stack<Integer> followingList=followBO.getFollowerOnlyUserId(user.getId());
+			followingList.push(user.getId());
+			result.put("followingList",followingList);
+			
+		}else {
+			result.put("loginCheck",false);
+			result.put("followingList",null);
+		}
+		
+		return result;
+	}
 	
 	@PostMapping("/post_create")
 	public Map<String,String> createPost(@RequestParam("content") String content

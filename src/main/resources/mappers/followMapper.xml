@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.h5tchigram.follow.dao.FollowDAO">
+
+	<select id="selectFollowCountByFollowingUserId" parameterType="int" resultType="int">
+		SELECT
+ 			COUNT(*)
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followingUserId`=#{followingUserId}
+	</select>
+	
+	<select id="selectFollowCountByFollowerUserId" parameterType="int" resultType="int">
+		SELECT
+ 			COUNT(*)
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followerUserId`=#{followerUserId}
+	</select>
+	
+ 	<select id="selectFollowListByFollowingUserId" parameterType="int" resultType="com.h5tchigram.follow.model.Follow">
+ 		SELECT
+ 			`id`
+ 			,`followingUserId`
+ 			,`followerUserId`
+ 			,`createdAt`
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followingUserId`=#{followingUserId}
+ 	</select>
+ 	
+ 	<select id="selectFollowListByFollowerUserId" parameterType="int" resultType="com.h5tchigram.follow.model.Follow">
+ 		SELECT
+ 			`id`
+ 			,`followingUserId`
+ 			,`followerUserId`
+ 			,`createdAt`
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followerUserId`=#{followerUserId}
+ 	</select>
+ 	
+ 	<select id="selectFollowByFollowingUserIdAndFollowerUserId" parameterType="map" resultType="com.h5tchigram.follow.model.Follow">
+ 		SELECT
+ 			`id`
+ 			,`followingUserId`
+ 			,`followerUserId`
+ 			,`createdAt`
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followerUserId`=#{followerUserId}
+ 		AND 
+ 			`followingUserId`=#{followingUserId}
+ 	</select>
+ 	
+ 	<select id="selectOnlyFollowingUserByFollowerId" parameterType="int" resultType="com.h5tchigram.follow.model.Follow">
+ 		SELECT
+ 			`followingUserId`
+ 		FROM
+ 			`follow`
+ 		WHERE
+ 			`followingUserId`=#{followerUserId}
+ 	</select>
+ 	
+ </mapper>

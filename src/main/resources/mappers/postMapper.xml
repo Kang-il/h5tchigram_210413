@@ -3,8 +3,52 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
  <mapper namespace="com.h5tchigram.post.dao.PostDAO">
+ 	<select id="selectPostByPostId" parameterType="int" resultType="com.h5tchigram.post.model.Post">
+ 		SELECT
+ 			`id`
+ 			,`userId`
+ 			,`contentType`
+ 			,`content`
+ 			,`imagePath`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`post`
+ 		WHERE 
+ 			`id`=#{postId}
+ 	</select>
  	
+ 	<select id="selectPostListByPostOwnerId" parameterType="int" resultType="com.h5tchigram.post.model.Post">
+ 		SELECT
+ 			`id`
+ 			,`userId`
+ 			,`contentType`
+ 			,`content`
+ 			,`imagePath`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`post`
+ 		WHERE 
+ 			`userId`=#{ownerId}
+ 	</select>
+ 	
+ 	<select id="selectPostThumbnailListByOwnerId" parameterType="int" resultType="com.h5tchigram.post.model.PostThumbnail">
+ 		SELECT
+ 			`id` AS `postId`
+ 			,`userId`
+ 			,`contentType`
+ 			,`imagePath`
+ 		FROM
+ 			`post`
+ 		WHERE 
+ 			`userId`=#{ownerId}
+ 		ORDER BY
+ 			`id`
+ 		DESC
+ 	</select>
  	<insert id="insertPost" parameterType="map">
+ 	
  		INSERT INTO
  			`post`
  			(
@@ -24,6 +68,7 @@
  				,NOW()
  				,NOW()
  			)
+ 			
  	</insert>
  	
  </mapper>

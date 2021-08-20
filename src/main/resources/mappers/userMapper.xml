@@ -3,6 +3,7 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
  <mapper namespace="com.h5tchigram.user.dao.UserDAO">
+ 
  	<select id="selectUserByLoginId" parameterType="String" resultType="com.h5tchigram.user.model.User">
  		SELECT 
  			`id`
@@ -54,4 +55,42 @@
  			`password`=#{password}
  	</select>
  	
+ 	<select id="selectUserById" parameterType="int" resultType="com.h5tchigram.user.model.User">
+ 		SELECT 
+ 			`id`
+ 			,`loginId`
+ 			,`password`
+ 			,`name`
+ 			,`nickname`
+ 			,`profileImagePath`
+ 			,`introduce`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`user`
+ 		WHERE
+ 			`id`=#{id}
+ 	</select>
+ 	
+ 	<select id="seleLastLikeUserById" parameterType="int" resultType="com.h5tchigram.user.model.User">
+ 		SELECT
+ 			`id`
+ 			`loginId`
+ 		FROM
+ 			`user`
+ 		WHERE
+ 			`id`=#{id}
+ 		LIMIT 1
+ 	</select>
+ 	
+ 	<select id="selectUserLoginIdAndProfileImagePathById" parameterType="int" resultType="com.h5tchigram.user.model.User">
+ 		SELECT
+ 			`id`
+ 			,`loginId`
+ 			,`profileImagePath`
+ 		FROM
+ 			`user`
+ 		WHERE
+ 			`id`=#{id}
+ 	</select>
  </mapper>
