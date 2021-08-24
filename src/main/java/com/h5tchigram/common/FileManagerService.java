@@ -40,4 +40,22 @@ public class FileManagerService {
 		//3. imageURL 만들기 및 반환하기
 		return "/images/"+directoryName+file.getOriginalFilename();
 	}
+	
+	
+	public void deleteFile(String imagePath) throws IOException{
+		Path path=Paths.get(FILE_UPLOAD_PATH+imagePath.replace("/images/", ""));
+		
+		//파일이 있으면 제거
+		if(Files.exists(path)) {
+			//제거
+			Files.delete(path);
+			
+			//디렉토리 삭제
+			path=path.getParent();
+			if(Files.exists(path)) {
+				Files.delete(path);
+			}
+		}
+	}
+	
 }

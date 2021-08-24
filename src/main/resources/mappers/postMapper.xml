@@ -96,5 +96,12 @@
  			)
  			
  	</insert>
- 
+ 	
+ 	<delete id="deletePost">
+ 		DELETE FROM
+ 			`post`
+ 		WHERE 
+ 			`id`=#{postId}
+ 	</delete>
+ 	
  </mapper>

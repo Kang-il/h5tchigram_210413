@@ -11,4 +11,5 @@ import com.h5tchigram.comment.model.Comment;
 public interface CommentDAO {
 	public int selectCommentCountByPostId(@Param("postId") int postId);
 	public List<Comment> selectCommentListByPostId(@Param("postId") int postId);
+	public void deleteCommentByPostId(@Param("postId") int postId);
 }

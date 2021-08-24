@@ -28,5 +28,8 @@ public class pinBO {
 	public int deletePin(int postId, int userId) {
 		return pinDAO.deletePin(postId, userId);
 	}
+	public void deletePinByPostId(int postId) {
+		pinDAO.deletePinByPostId(postId);
+	}
 
 }

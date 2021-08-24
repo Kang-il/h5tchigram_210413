@@ -23,5 +23,5 @@ public interface PinDAO {
 						,@Param("userId") int userId
 						);
 	
-	
+	public void deletePinByPostId(@Param("postId")int postId);
 }

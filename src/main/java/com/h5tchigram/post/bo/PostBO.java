@@ -135,4 +135,25 @@ public class PostBO {
 		return postDAO.insertPost(userId,contentType,content,imageUrl);
 	}
 	
+	public void deletePost(int postId , int userId) {
+		Post post= postDAO.selectPostByPostId(postId);
+		
+		if(userId == post.getUserId()) {
+			postDAO.deletePost(postId);
+			
+			//1. 파일 삭제
+			try {
+				fileManagerService.deleteFile(post.getImagePath());
+			} catch (IOException e) {
+				logger.error("파일 삭제 오류:::::::::::::::"+e.getMessage());
+			}
+			//2. 댓글 삭제
+			commentBO.deleteCommentByPostId(postId);
+			//3. 라이크 삭제
+			likeBO.deleteLikeByPostId(postId);
+			//4. 해당 게시글 핀 정보 삭제하기
+			pinBO.deletePinByPostId(postId);
+		}
+	}
+	
 }

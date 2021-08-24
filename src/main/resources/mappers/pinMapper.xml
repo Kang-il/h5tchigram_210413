@@ -54,6 +54,11 @@
  		AND
  			`userId`=#{userId}
  	</delete>
- 	
+ 	<delete id="deletePinByPostId" parameterType="int">
+ 		DELETE FROM
+ 			`pin`
+ 		WHERE
+ 			`postId`=#{postId}
+ 	</delete>
  	
  </mapper>
