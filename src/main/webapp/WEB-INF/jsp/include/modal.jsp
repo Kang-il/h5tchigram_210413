@@ -73,7 +73,7 @@
 			
 				<div class="description-item">
 				
-					<a href="user/main_view?userId=${feedOwner.id}">
+					<a class="content-user-link" href="user/main_view?userId=${feedOwner.id}">
 						<%--이미지가 있을경우 --%>
 						<c:if test="${feedOwner.profileImagePath ne null }">
 							<img src="" class="user-profile">
@@ -86,7 +86,7 @@
 					</a>
 					
 					<a href="/user/main_view?userId=${feedOwner.id}" class="comment-id">${feedOwner.loginId}</a>
-					<span class="comment-modal-post-content">집에 가고 싶네여.</span>
+					<div class="comment-modal-post-content">집에 가고 싶네여.</div>
 				</div>
 				
 				<%-- TODO ::: forEach  --%>
@@ -106,12 +106,18 @@
 			<div class="comment-modal-des3">
 			
 				<div class="action-button">
-					<button type="button" class="material-icons-outlined">favorite_border</button>
-					<button type="button" class="material-icons-outlined d-none">favorite</button>
-					<button type="button" class="material-icons-outlined action-text-focus-btn">textsms</button>
-					<button type="button" class="material-icons-outlined icon-item"> email </button>
+					<div>
+						<button type="button" class="material-icons-outlined d-none modal-like-before-btn" id="modalLikeBeforeBtn">favorite_border</button>
+						<button type="button" class="material-icons-outlined d-none modal-like-after-btn" id="modalLikeAfterBtn">favorite</button>
+						<button type="button" class="material-icons-outlined action-text-focus-btn">textsms</button>
+						<button type="button" class="material-icons-outlined icon-item"> email </button>
+					</div>
+					<div>
+						<button type="button" class="material-icons-outlined modal-pin-before-btn" >bookmark_border</button>
+						<button class="material-icons-outlined d-none modal-pin-after-btn">bookmark</button>
+					</div>
 				</div>
-					
+
 				<div class="item-like-section">
 					<a href="#"><img src="/static/images/dummy_profile.jpg" class="like-profile"/></a>
 					<a href="#" class="like-first-id">아이디</a>님&nbsp;
@@ -132,7 +138,7 @@
 			
 				<button type="button" id="modal-emoji-picker" class="material-icons-outlined item-emoji-picker">sentiment_satisfied_alt</button>
 				
-				<input type="text" class="modal-comment-form modal-comment-form" placeholder="댓글달기..."/>
+				<input type="text" class="modal-comment-form" placeholder="댓글달기..."/>
 				
 				<div class="btn-box">
 					<button type="button" class="comment-submit-btn">게시</button>
@@ -146,46 +152,6 @@
 	
 </div>
 
-<%----------------------------------------------------%>
-
-
-<div class="follow-modal-section d-none">
-	<div class="follow-modal-box">
-		<div class="follow-modal-title-box">
-			<span>팔로우</span>
-		</div>
-		<hr class="m-0">
-		<div class="follow-members-section">
-			<div class="follow-member-item">
-				<img src="/static/images/dummy_profile.jpg" class="follow-image">
-				<a href="#"><span>cooiiing</span></a>
-				<div class="follow-action-button-box">
-					<button type="button" class="follow-action-del-btn">삭제</button>
-					<button type="button" class="follow-action-following-btn d-none">팔로우</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div class="follow-delete-modal-section d-none">
-	<div class="follow-delete-modal-box">
-		<div class="delete-user-image-box">
-			<img src="/static/images/dummy_profile.jpg" class="delete-user-image">
-		</div>
-		<div class="follow-delete-info">
-			<p class="title">팔로워를 삭제하시겠어요?</p>
-			<p class="description">h5tchi님은 회원님이 팔로워 리스트에서<br>삭제된 사실을 알 수 없습니다.</p>
-		</div>
-		<hr class="m-0">
-		<div class="delete-button-box">
-			<p class="delete-btn">삭제</p>
-			<hr class="m-0">
-			<p class="cancel-btn">취소</p>
-		</div>
-	</div>
-</div>
 
 <%--글 등록 사진 클릭 시 크게 보여주는 모달창 --%>
 <div class="create-post-item-modal-section d-none">

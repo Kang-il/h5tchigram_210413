@@ -63,7 +63,7 @@
 					</div>
 					
 					<div class="profile-info-box2">
-						<div>게시물 <span>${fn:length(postThumbnailList)}</span></div>
+						<div>게시물 <span>${postCount}</span></div>
 						<div>팔로워 <span class="profile-info-follow">${followerCount}</span></div>
 						<div>팔로잉 <span class="profile-info-follow">${followingCount}</span></div>
 					</div>
@@ -80,16 +80,17 @@
 		
 		<hr class="m-0">
 		
-		<nav class="profile-contents-nav">
-			<button type="button">게시물</button>
-			<button type="button">동영상</button>
-			<button type="button">저장됨</button>
+		<nav class="profile-contents-nav" data-category="${category}">
+			<button type="button" class="all-contents-btn" data-feed-owner-id="${feedOwner.id}">게시물</button>
+			<button type="button" class="only-contents-photo-btn" data-feed-owner-id="${feedOwner.id}">사진</button>
+			<button type="button" class="only-contents-video-btn" data-feed-owner-id="${feedOwner.id}">동영상</button>
+			<c:if test="${user.id eq feedOwner.id}">
+				<button type="button" class="pined-contens-btn" data-feed-owner-id="${feedOwner.id}">저장됨</button>
+			</c:if>
 		</nav>
 		
 		<div class="profile-contents-box">
 			<%--TODO:::forEach 동적으로--%>
-			
-			
 			
 		<c:forEach var="post" items="${postThumbnailList}" varStatus="status">
 			<c:if test="${status.index % 3 eq 0 }">
@@ -111,8 +112,7 @@
 			<c:if test="${status.index % 3 eq 2 }">
 				</div>
 			</c:if>
-			
-		</c:forEach>
+</c:forEach>
 		</div>
 	</div>
 	
@@ -210,6 +210,39 @@
 			}
 		}
 		$(document).ready(function(){
+			if($('.profile-contents-nav').data('category')=='all'){
+				$('.all-contents-btn').focus();
+			}else if($('.profile-contents-nav').data('category')=='video'){
+				$('.only-contents-video-btn').focus();
+			}else if($('.profile-contents-nav').data('category')=='photo'){
+				$('.only-contents-photo-btn').focus();
+			}else if($('.profile-contents-nav').data('category')=='pinned'){
+				$('.pinned-contents-btn').focus();
+			}
+			
+			$('.all-contents-btn').on('click',function(){
+				let feedOwnerId = $(this).data('feed-owner-id');
+				location.href="/user/main_view?userId="+feedOwnerId+'&category=all';
+				$(this).focus();
+			});
+			
+			$('.only-contents-photo-btn').on('click',function(){
+				let feedOwnerId = $(this).data('feed-owner-id');
+				location.href="/user/main_view?userId="+feedOwnerId+'&category=photo';
+				$(this).focus();
+			});
+			
+			$('.only-contents-video-btn').on('click',function(){
+				let feedOwnerId = $(this).data('feed-owner-id');
+				location.href="/user/main_view?userId="+feedOwnerId+'&category=video';
+				$(this).focus();
+			});
+			
+			$('.pined-contens-btn').on('click',function(){
+				let feedOwnerId = $(this).data('feed-owner-id');
+				location.href="/user/main_view?userId="+feedOwnerId+'&category=pinned';
+				$(this).focus();
+			});
 			
 			//좋아요 클릭
 			//좋아요 리스트를 가져온다.
@@ -240,6 +273,7 @@
 					}
 				});
 			});
+			
 			//좋아요 취소
 			$('.modal-like-after-btn').on('click',function(){
 				let postId=$(this).data("post-id");
@@ -267,13 +301,81 @@
 				});
 			});
 			
+			$('.modal-pin-before-btn').on('click',function(){
+				//저장하기 클릭
+				let postId=$(this).data('post-id');
+				console.log(postId);
+				$.ajax({
+					type:'get'
+					,url:'/pin/create_pin'
+					,data:{'postId':postId}
+					,success: function(data){
+						if(data.result===true){
+							$('.modal-pin-before-btn').addClass('d-none');
+							$('.modal-pin-after-btn').removeClass('d-none');
+						}else{
+							alert("저장 실패 관리자에게 문의하세요");
+						}
+					}
+					,error:function(e){
+						alert(e);
+					}
+				});
+			});
+			
+			$('.modal-pin-after-btn').on('click',function(){
+				//저장하기 취소
+				let postId=$(this).data('post-id');
+				
+				$.ajax({
+					type:'get'
+					,url:'/pin/delete_pin'
+					,data:{'postId':postId}
+					,success: function(data){
+						if(data.result===true){
+							$('.modal-pin-before-btn').removeClass('d-none');
+							$('.modal-pin-after-btn').addClass('d-none');
+						}else{
+							alert("삭제 실패 관리자에게 문의하세요");
+						}
+					}
+					,error:function(e){
+						alert(e);
+					}
+				});
+			});
+			
 			$(".profile-content").on('click',function(){
 				let postId=$(this).data("post-id");
+				
 				//1.내가 좋아요를 눌렀는지 알아야 함
 				//userId--세션에서 가져감 postId만 전송
 				//좋아요를 눌렀는지 체크 하는 기능
 				$('.modal-like-before-btn').data('post-id', postId);
 				$('.modal-like-after-btn').data('post-id', postId);
+				
+				//2. 내가 pin 을 했는지 알아야 함 --
+				$('.modal-pin-before-btn').data('post-id',postId);
+				$('.modal-pin-after-btn').data('post-id',postId);
+				
+				$.ajax({
+					type:'GET'
+					,url:'/pin/check_pin'
+					,data:{'postId':postId}
+					,success:function(data){
+						if(data.result===true){//저장되어있음
+							$('.modal-pin-before-btn').addClass('d-none');
+							$('.modal-pin-after-btn').removeClass('d-none');
+						}else if(data.result===false){
+							$('.modal-pin-after-btn').addClass('d-none');
+							$('.modal-pin-before-btn').removeClass('d-none');
+						}
+					}
+					,error: function(e){
+						alert(e);
+					}
+				});
+				
 				
 				//다른 게시물 클릭 시 input 창에 쓰여져있는 텍스트를 모두 지워준다
 				$('.modal-comment-form').val('');
@@ -306,6 +408,11 @@
 						$('.comment-modal-content-picture').attr('src',data.post.imagePath);
 						$('.delete-link').attr('href','/post/delete_post?postId='+data.post.id);
 						$('.go-to-post-link').attr('href','/post/post_detail_view?postId='+data.post.id);
+						// 프로필 사진 링크
+						
+						$('.content-user-link, .user-id, .comment-id').attr('href','/user/main_view?userId='+data.post.userId);
+						$('.user-id, .comment-id').text(data.post.userLoginId);
+						console.log(data.post.userLoginId);
 						$('.comment-modal-post-content').text(data.post.content);
 						//댓글 작성 동적으로 반복해서 추가해 준다.
 						data.post.commentList.map(comment=>{
@@ -314,7 +421,7 @@
 							$('.comments-box').append('<div class="comment-item">'+'<div><a href="/user/main_view?userId='+comment.userId+'">'
 																+'<img src="'+profileImagePath+'" class="user-profile"/></a>'
 																+'<a href="/user/main_view?userId='+comment.userId+'"class="comment-id">'+comment.userLoginId+'</a>'
-																+'<span>'+comment.comment+'</span>'
+																+'<span class="ml-2">'+comment.comment+'</span>'
 															+'</div>'
 															+'<div class="comment-menu-box">'
 																+'<button type="button" class="material-icons-outlined menu-btn" onclick="deleteModal('+comment.id+')" >more_horiz</button>'

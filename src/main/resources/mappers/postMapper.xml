@@ -43,10 +43,36 @@
  			`post`
  		WHERE 
  			`userId`=#{ownerId}
+ 		<if test="category!=null">
+ 		AND `contentType`=#{category}
+ 		</if>
  		ORDER BY
  			`id`
  		DESC
  	</select>
+ 	
+ 		
+ 	<select id="selectPostThumbnailByPostId" parameterType="int" resultType="com.h5tchigram.post.model.PostThumbnail">
+	 	SELECT
+	 		`id` AS `postId`
+	 		,`userId`
+	 		,`contentType`
+	 		,`imagePath`
+ 		FROM
+ 			`post`
+ 		WHERE 
+ 			`id`=#{postId}
+ 	</select>
+ 	
+ 	<select id="selectPostCountByUserId" parameterType="int" resultType="int">
+ 		SELECT
+ 			COUNT(*)
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`userId`=#{ownerId}
+ 	</select>
+ 	
  	<insert id="insertPost" parameterType="map">
  	
  		INSERT INTO
@@ -70,5 +96,5 @@
  			)
  			
  	</insert>
- 	
+ 
  </mapper>

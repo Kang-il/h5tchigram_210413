@@ -58,6 +58,7 @@ public class UserController {
 	@RequestMapping("/main_view")
 	public String mainView(Model model
 						  ,@RequestParam(value = "userId",required=false) Integer postOwnerId //해당 프로필을 찾는다.
+						  ,@RequestParam(value="category",required=false) String category
 						  ,HttpServletRequest request) {
 		
 		
@@ -109,7 +110,22 @@ public class UserController {
 		}
 		
 		model.addAttribute("feedOwner", user);
-
+		
+		//TODO 카테고리별 갸져오는 포스트 다르게 하기
+		//TODO 게시물 수 가져오기!
+		List<PostThumbnail> postThumbnailList=null;
+		int postCount =postBO.getPostCount(user.getId());
+		if(category == null || category.equals("all")) {
+			postThumbnailList = postBO.getPostThumbnailListByOwnerId(user.getId(),null);
+		}else if(category.equals("photo") || category.equals("video") ) {
+			postThumbnailList = postBO.getPostThumbnailListByOwnerId(user.getId(),category);
+		}else if(category.equals("pinned")) {
+			//TODO  pin한 이미지 썸네일 가져오기 
+			postThumbnailList=postBO.getPinedPostThumbnailListByOwnerId(user.getId());
+		}
+		model.addAttribute("category",category);
+		
+		
 		//팔로우 수를 세준다.
 		//팔로우 수 클릭하는 순간 ajax 통신을 통해 리스트를 받아올 예정
 		int followingCount=followBO.getFollowCountByFollowingUserId(user.getId());
@@ -117,14 +133,16 @@ public class UserController {
 		
 
 		// 피드주인의 포스트썸네일 가져오기
-		List<PostThumbnail> postThumbnailList=postBO.getPostThumbnailListByOwnerId(user.getId());
+		
 		
 		//model로 가공된 포스트리스트를 전달함
 		model.addAttribute("postThumbnailList", postThumbnailList);
+		model.addAttribute("postCount",postCount);
 		model.addAttribute("followingCount", followingCount);
 		model.addAttribute("followerCount", followerCount);
 		
 		
 		return "template/user_profile_layout";
 	}
+	
 }

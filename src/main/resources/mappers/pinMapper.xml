@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.h5tchigram.pin.dao.PinDAO">
+ 
+ 	<select id="selectPinByPostIdAndUserId" parameterType="map" resultType="com.h5tchigram.pin.model.Pin">
+ 		SELECT
+ 			`id`
+ 			,`postId`
+ 			,`userId`
+ 			,`createdAt`
+ 		FROM 
+ 			`pin`
+ 		WHERE
+ 			`postId`=#{postId}
+ 		AND
+ 			`userId`=#{userId}
+ 	</select>
+ 	
+ 	<select id="selectPinListByUserId" parameterType="int" resultType="com.h5tchigram.pin.model.Pin">
+ 		SELECT
+ 			`id`
+ 			,`postId`
+ 			,`userId`
+ 			,`createdAt`
+ 		FROM 
+ 			`pin`
+ 		WHERE
+ 			`userId`=#{userId}
+ 	</select>
+ 	
+ 	<insert id="insertPin" parameterType="map">
+ 		INSERT INTO
+ 			`pin`
+	 		(
+	 		`postId`
+	 		,`userId`
+	 		,`createdAt`
+	 		)
+ 		VALUES
+	 		(
+	 		#{postId}
+	 		,#{userId}
+	 		,NOW()
+	 		)
+ 	</insert>
+ 	
+ 	<delete id="deletePin" parameterType="map">
+ 		DELETE FROM
+ 			`pin`
+ 		WHERE
+ 			`postId`=#{postId}
+ 		AND
+ 			`userId`=#{userId}
+ 	</delete>
+ 	
+ 	
+ </mapper>
