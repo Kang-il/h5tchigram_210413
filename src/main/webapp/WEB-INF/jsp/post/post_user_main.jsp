@@ -1,123 +1,139 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+	pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<jsp:include page="../include/modal.jsp"/>
-<jsp:include page="../include/follow_modal.jsp"/>
+<jsp:include page="../include/modal.jsp" />
+<jsp:include page="../include/follow_modal.jsp" />
 
 
 <div class="profile-section">
-		<div class="profile-divide-section">
-		
-			<div class="profile-box">
-			
-				<div class="profile-image-box">
-				
-					<div class="profile-image-frame">
-					
-						<div class="profile-image-item">
-							<c:if test="${feedOwner.profileImagePath eq null}">
-								<img src="/static/images/no_profile_image.png" class="profile-image">
-							</c:if>
-							<c:if test="${feedOwner.profileImagePath ne null}">
-								<img src="${feedOwner.profileImagePath}" class="profile-image">
-							</c:if>
-						</div>
-						
+	<div class="profile-divide-section">
+
+		<div class="profile-box">
+
+			<div class="profile-image-box">
+
+				<div class="profile-image-frame">
+
+					<div class="profile-image-item">
+						<c:if test="${feedOwner.profileImagePath eq null}">
+							<img src="/static/images/no_profile_image.png"
+								class="profile-image">
+						</c:if>
+						<c:if test="${feedOwner.profileImagePath ne null}">
+							<img src="${feedOwner.profileImagePath}" class="profile-image">
+						</c:if>
 					</div>
-					
+
 				</div>
-				
+
 			</div>
-			
-			<div class="profile-info-section">
-			
-				<div class="profile-info-frame">
-					
-					<div class="profile-info-box1">
-						<span>${feedOwner.loginId}</span>
-						<c:choose>
-							<%-- 내 피드 --%>
-							<c:when test="${checkMyFeed eq true}">
-								<button type="button" class="profile-edit-btn">프로필 편집</button>
-							</c:when>
-							<%-- 상대방 피드 --%>
-							<c:when test="${checkMyFeed eq false}">
-							
-								<c:if test="${checkFollowing eq true }">
-									<button type="button" class="profile-follow-btn">팔로우</button>
-								</c:if>
-								
-								<c:if test="${checkFollowing eq false}">								
-									<button type="button" class="profile-follow-btn">팔로우 하기</button>
-								</c:if>
-								
-							</c:when>
-							<%-- 로그인이 안되어있음 --%>
-							<c:when test="${checkMyFeed eq null }">
-							</c:when>
-						</c:choose>
-					</div>
-					
-					<div class="profile-info-box2">
-						<div>게시물 <span>${postCount}</span></div>
-						<div>팔로워 <span class="profile-info-follow">${followerCount}</span></div>
-						<div>팔로잉 <span class="profile-info-follow">${followingCount}</span></div>
-					</div>
-					
-					<div class="profile-info-box3">
-						<div><span>${feedOwner.nickname}</span></div>
-						<div>${feedOwner.introduce}</div>
-					</div>
-					
-				</div>
-				
-			</div>
+
 		</div>
-		
-		<hr class="m-0">
-		
-		<nav class="profile-contents-nav" data-category="${category}">
-			<button type="button" class="all-contents-btn" data-feed-owner-id="${feedOwner.id}">게시물</button>
-			<button type="button" class="only-contents-photo-btn" data-feed-owner-id="${feedOwner.id}">사진</button>
-			<button type="button" class="only-contents-video-btn" data-feed-owner-id="${feedOwner.id}">동영상</button>
-			<c:if test="${user.id eq feedOwner.id}">
-				<button type="button" class="pined-contens-btn" data-feed-owner-id="${feedOwner.id}">저장됨</button>
-			</c:if>
-		</nav>
-		
-		<div class="profile-contents-box">
-			<%--TODO:::forEach 동적으로--%>
-			
+
+		<div class="profile-info-section">
+
+			<div class="profile-info-frame">
+
+				<div class="profile-info-box1">
+					<span id="profileUserId">${feedOwner.loginId}</span>
+					<c:choose>
+						<%-- 내 피드 --%>
+						<c:when test="${checkMyFeed eq true}">
+							<button type="button" class="profile-edit-btn">프로필 편집</button>
+						</c:when>
+						<%-- 상대방 피드 --%>
+						<c:when test="${checkMyFeed eq false}">
+
+							<c:if test="${checkFollowing eq false}">
+								<button type="button" class="profile-following-btn" data-feed-owner-id="${feedOwner.id}">팔로잉</button>
+							</c:if>
+
+							<c:if test="${checkFollowing eq true}">
+								<button type="button" class="profile-follow-btn" data-feed-owner-id="${feedOwner.id}">팔로우 하기</button>
+							</c:if>
+
+						</c:when>
+						<%-- 로그인이 안되어있음 --%>
+						<c:when test="${checkMyFeed eq null }">
+						</c:when>
+					</c:choose>
+				</div>
+
+				<div class="profile-info-box2">
+					<div>
+						게시물 <span>${postCount}</span>
+					</div>
+					<div>
+						팔로워 <span class="profile-info-follow profile-follower-info"
+							id="follower">${followerCount}</span>
+					</div>
+					<div>
+						팔로잉 <span class="profile-info-follow profile-following-info"
+							id="following">${followingCount}</span>
+					</div>
+				</div>
+
+				<div class="profile-info-box3">
+					<div>
+						<span>${feedOwner.nickname}</span>
+					</div>
+					<div>${feedOwner.introduce}</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<hr class="m-0">
+
+	<nav class="profile-contents-nav" data-category="${category}">
+		<button type="button" class="all-contents-btn"
+			data-feed-owner-id="${feedOwner.id}">게시물</button>
+		<button type="button" class="only-contents-photo-btn"
+			data-feed-owner-id="${feedOwner.id}">사진</button>
+		<button type="button" class="only-contents-video-btn"
+			data-feed-owner-id="${feedOwner.id}">동영상</button>
+		<c:if test="${user.id eq feedOwner.id}">
+			<button type="button" class="pined-contens-btn"
+				data-feed-owner-id="${feedOwner.id}">저장됨</button>
+		</c:if>
+	</nav>
+
+	<div class="profile-contents-box">
+		<%--TODO:::forEach 동적으로--%>
+
 		<c:forEach var="post" items="${postThumbnailList}" varStatus="status">
 			<c:if test="${status.index % 3 eq 0 }">
 				<div class="profile-contents-row">
 			</c:if>
-			
-				<div class="profile-content" data-post-id="${post.postId}" data-content-type="${post.contentType}">
-					<div class="profile-contents-unit">
-						<img src="${post.imagePath}" class="post-image">
-						<div class="content-simple-info">
-							<span class="material-icons-outlined icon">favorite</span>
-							<span class="count post-like-list" >${post.likeCount}</span>
-							<span class="material-icons icon">chat_bubble</span>
-							<span class="count comment-list">${post.commentCount}</span>
-						</div>
+
+			<div class="profile-content" data-post-id="${post.postId}"
+				data-content-type="${post.contentType}">
+				<div class="profile-contents-unit">
+					<img src="${post.imagePath}" class="post-image">
+					<div class="content-simple-info">
+						<span class="material-icons-outlined icon">favorite</span> <span
+							class="count post-like-list">${post.likeCount}</span> <span
+							class="material-icons icon">chat_bubble</span> <span
+							class="count comment-list">${post.commentCount}</span>
 					</div>
 				</div>
-				
+			</div>
+
 			<c:if test="${status.index % 3 eq 2 }">
-				</div>
-			</c:if>
-</c:forEach>
-		</div>
 	</div>
-	
-	
-	<script>
+	</c:if>
+	</c:forEach>
+</div>
+</div>
+
+
+<script>
 		//ㅇㅇ이 좋아요를 눌렀다. ㅇㅇ 외 ㅇㅇ명이 좋아요를 눌렀다 를 구성하는 function
 		function createLikeCount(likeList){
 			
@@ -179,11 +195,11 @@
 					//TODO ::::: 팔로잉 언팔로우 기능 구현할 때 버튼 수정!!!! 
 					if(followingList.indexOf(like.userId)!=-1){
 						//TODO :::: 팔로우 버튼 클릭 시 바로 팔로우 처리 할 예정
-						button = '<button type="button" class="like-section-follower-btn" onclick="following('+like.userId+')">팔로잉</button>';
+						button = '<button type="button" class="like-section-follower-btn" data-user-id="'+like.userId+'"data-like-user-login-id="'+like.userLoginId+'" data-post-id="'+like.postId+'">삭제</button>';
 					}else{
 					//팔로우 리스트에 같은값이 없다면 팔로우가 안되어있으니 팔로우 버튼을 보여줄 것
 					//팔로우 취소할 지 한 번 더 물어보기 위해 onClick시에 유저의 아이디를 넘겨주는 function을 만듦
-						button = '<button type="button" class="like-section-following-btn" onclick="sendUserId('+like.userId+')">팔로우</button>';
+						button = '<button type="button" class="like-section-following-btn" data-user-id="'+like.userId+'" data-post-id="'+like.postId+'">팔로우</button>';
 					}
 					
 					//좋아요 누른 사람의 아이디번호가 로그인된 아이디 번호와 같다면 버튼을 없앨 것
@@ -195,7 +211,7 @@
 					let html=('<div class="like-item">'
 									+'<div>'
 										+'<a href="/user/main_view?userId='+like.userId+'" class="like-pic-link">'
-											+'<img src="'+likeProfileImagePath+'"class="like-modal-user-pic">'
+											+'<img src="'+likeProfileImagePath+'" id="likeUserImg'+like.userId+'" class="like-modal-user-pic">'
 										+'</a>'
 										+'<a href="/user/main_view?userId='+like.userId+'" class="like-user-link">'+like.userLoginId+'</a>'
 									+'</div>'
@@ -439,13 +455,13 @@
 				});
 				
 			});
-			
+
 			$('.item-like-section').on('click','.like-headcount-btn',function(){
 				$('.like-modal-section').removeClass('d-none');
 			});
 			
 			$('.like-modal-section').on('click',function(e){
-				if(!$('.item-like-section').has(e.target).length){
+				if(!$('.like-modal-box').has(e.target).length){
 					$('.like-modal-section').addClass('d-none');
 					//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
 					if($('.comment-modal-section').hasClass('d-none')===true){ 

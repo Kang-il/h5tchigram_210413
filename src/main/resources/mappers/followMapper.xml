@@ -69,4 +69,29 @@
  			`followingUserId`=#{followerUserId}
  	</select>
  	
+ 	<insert id="insertFollow" parameterType="map">
+ 		INSERT INTO
+ 			`follow`
+ 			(
+ 			`followingUserId`
+ 			,`followerUserId`
+ 			,`createdAt`
+ 			)
+ 			VALUES
+ 			(
+ 				#{followingUserId}
+ 				,#{followerUserId}
+ 				,NOW()
+ 			)
+ 	</insert>
+ 	
+ 	<delete id="deleteFollow" parameterType="map">
+ 		DELETE FROM
+ 			`follow`
+ 		WHERE
+ 			`followingUserId`=#{followingUserId}
+ 		AND
+ 			`followerUserId`=#{followerUserId}
+ 	</delete>
+ 	
  </mapper>

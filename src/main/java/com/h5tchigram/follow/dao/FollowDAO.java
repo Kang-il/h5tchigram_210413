@@ -9,6 +9,7 @@ import com.h5tchigram.follow.model.Follow;
 
 @Repository
 public interface FollowDAO {
+	
 	public List<Follow> selectFollowListByFollowingUserId(@Param("followingUserId")int followingUserId);
 	public List<Follow> selectFollowListByFollowerUserId(@Param("followerUserId")int followerUserId);
 	
@@ -20,5 +21,12 @@ public interface FollowDAO {
 	public Follow selectFollowByFollowingUserIdAndFollowerUserId(
 			@Param("followingUserId") int followingUserId
 			,@Param("followerUserId") int followerUserId);
+	
+	public void insertFollow(@Param("followingUserId") int followingUserId
+							,@Param("followerUserId") int followerUserId
+							);
+	public void deleteFollow(@Param("followingUserId") int followingUserId
+							,@Param("followerUserId") int followerUserId
+							);
 	
 }

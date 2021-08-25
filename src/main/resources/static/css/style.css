@@ -911,13 +911,17 @@ header .header-nav-box .icon-item{
 
 }
 
-.comment-modal-des2 span{
+.comment-modal-des2 .comment-modal-post-content{
 	font-size:15px;
 	margin-left:8px;
+	width:200px;
 }
 
 .comment-modal-des2 .description-item{
 	margin:15px 0 15px 15px;
+	display:flex;
+	align-items: center;
+
 }
 
 .comment-modal-des2 .comment-item{
@@ -967,8 +971,13 @@ header .header-nav-box .icon-item{
 .comment-modal-des3 .action-button{
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
-
+.comment-modal-des3 .action-button div{
+	display: flex;
+	align-items: center;
+	margin-right:10px;
+}
 .comment-modal-des3 .action-button button{
 	color:#393939;
 	margin-top:8px;
@@ -981,11 +990,11 @@ header .header-nav-box .icon-item{
 	cursor: pointer; 	
 }
 
-.comment-modal-des3 .action-button button:nth-child(1){
+.comment-modal-des3 .action-button .modal-like-before-btn{
 	margin-left:10px;
 }
 
-.comment-modal-des3 .action-button button:nth-child(2){
+.comment-modal-des3 .action-button .modal-like-after-btn{
 	color:#ed4956;	
 	font-size:30px;
 	margin-left:10px;
@@ -1162,6 +1171,22 @@ header .header-nav-box .icon-item{
 	cursor: pointer;
 	outline: none;
 	border:none;
+	
+}
+
+.profile-info-box1 .profile-following-btn{
+	font-size: 15px;
+	font-weight: 700;
+	background-color:white;
+	color:#6c6c6c;
+	padding:3px;
+	width:110px;
+	margin-left:30px;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	border:none;
+	border: 1px #dbdbdb solid;
 	
 }
 
@@ -1370,7 +1395,7 @@ header .header-nav-box .icon-item{
 	
 }
 
-.follow-modal-box .follow-members-section{
+.follow-modal-box .following-members-section , .follower-members-section{
 	height:350px;
 	overflow-y:scroll;
 }
@@ -1396,8 +1421,12 @@ header .header-nav-box .icon-item{
 	margin-left: 13px;
 	font-weight: 700;
 }
+.follow-members-section .follow-member-item .follow-login-id{
+	width:200px;
+}
+
 .follow-member-item .follow-action-button-box{
-	width:190px;
+	width:80px;
 	display: flex;
 	justify-content:flex-end;
 	align-items:center;

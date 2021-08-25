@@ -1,12 +1,15 @@
 package com.h5tchigram.like;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +28,8 @@ public class LikeRestController {
 	private LikeBO likeBO;
 	@Autowired
 	private FollowBO followBO;
+	
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping("/check_like")
 	public Map<String,Boolean> checkLike(@RequestParam("postId") int postId, HttpServletRequest request){
@@ -117,6 +122,36 @@ public class LikeRestController {
 			result.put("loginCheck",false);
 			result.put("result",false);
 		}
+		
+		return result;
+	}
+	
+	@RequestMapping("/get_like_list")
+	public Map<String,Object> getLikeList(@RequestParam("postId")int postId
+										 ,HttpServletRequest request
+										 ){
+		
+		HttpSession session=request.getSession();
+		User user=(User)session.getAttribute("user");
+		
+		Map<String,Object> result=new HashMap<>();
+		
+		if(user!=null) {
+			Stack<Integer> followList=followBO.getFollowerOnlyUserId(user.getId());
+			followList.push(user.getId());
+			
+			List<Like> likeList=likeBO.getLikeListByPostId(postId);
+			
+			result.put("loginCheck", true);
+			result.put("followingList", followList);
+			result.put("likeList", likeList);
+			logger.debug("::::::::::::::"+likeList);
+			logger.debug("::::::::::::::"+followList);
+			
+		}else {
+			result.put("loginCheck", false);
+		}
+		
 		
 		return result;
 	}

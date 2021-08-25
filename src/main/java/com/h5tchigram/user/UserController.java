@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,7 @@ public class UserController {
 	@Autowired
 	private FollowBO followBO;
 	
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping("/sign_in_view")
 	public String signInView(Model model) {
@@ -84,15 +87,18 @@ public class UserController {
 				
 			}else {
 				model.addAttribute("checkMyFeed", false);
+				int myId=user.getId();
 				//내 피드가 아니라면 피드 주인 정보 가져오기
 				user=userBO.getUserById(postOwnerId);
-				Follow followCheck=followBO.getFollowByFollowingUserIdAndFollowerUserId(user.getId(),postOwnerId);
-				
-				if(followCheck==null) {
+				Follow followCheck=followBO.getFollowByFollowingUserIdAndFollowerUserId(myId,postOwnerId);
+			
+				if(followCheck!=null) {
 					model.addAttribute("checkFollowing",false);
 				}else {
 					model.addAttribute("checkFollowing", true);
 				}
+				
+				
 				//user에 남의 정보
 			}
 			
@@ -111,10 +117,10 @@ public class UserController {
 		
 		model.addAttribute("feedOwner", user);
 		
-		//TODO 카테고리별 갸져오는 포스트 다르게 하기
-		//TODO 게시물 수 가져오기!
 		List<PostThumbnail> postThumbnailList=null;
+		
 		int postCount =postBO.getPostCount(user.getId());
+		
 		if(category == null || category.equals("all")) {
 			postThumbnailList = postBO.getPostThumbnailListByOwnerId(user.getId(),null);
 		}else if(category.equals("photo") || category.equals("video") ) {
