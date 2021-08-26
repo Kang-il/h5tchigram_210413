@@ -46,11 +46,11 @@ public class PostRestController {
 		if(user!=null) {
 			result.put("loginCheck",true);
 			
-			//스택구조 후입선출 구조 이용
-			//제일 마지막에 자신을 넣음. pop을 통해 꺼내는 순간 자신의 아이디가 나옴
 			Stack<Integer> followingList=followBO.getFollowerOnlyUserId(user.getId());
 			followingList.push(user.getId());
 			result.put("followingList",followingList);
+			
+			result.put("myId", user.getId());
 			
 		}else {
 			result.put("loginCheck",false);

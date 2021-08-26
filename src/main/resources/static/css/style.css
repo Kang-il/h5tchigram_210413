@@ -358,7 +358,7 @@ header .header-nav-box .icon-item{
 	margin-top:5px;
 }
 
-.timeline-section .post-item-box .comment-unit .comment-id{
+.timeline-section .post-item-box .comment-unit .comment-id, .owner-id{
 	color:black;
 	font-weight:500;
 	font-size:13px;
@@ -546,7 +546,12 @@ header .header-nav-box .icon-item{
 .menu-modal-section .menu-modal-box .modal-menu-item a{
 	width:370px;
 	color:black;
+	
 }
+.comment-delete-button{
+	cursor:pointer;
+}
+
 .menu-modal-section .menu-modal-box .modal-menu-item a:hover{
 	text-decoration: none;
 }
@@ -931,7 +936,7 @@ header .header-nav-box .icon-item{
 	justify-content:space-between;
 }
 
-.comment-item button, .menu-btn{
+.comment-item button, .comment-menu-btn{
 	background-color: rgba( 255, 255, 255, 0 );
 	border:none;
 	outline:none;
@@ -948,11 +953,15 @@ header .header-nav-box .icon-item{
 	padding:2px;
 }
 
-.comment-modal-des2 .comment-id {
+.comment-modal-des2 .comment-id , .owner-id{
 	font-size:13px;
 	color:black;
 	font-weight: 700;
 	margin-left:10px;
+}
+
+.comment-modal-des2 .comment-id:hover , .owner-id:hover{
+	color:black;
 }
 
 .comment-modal-des2 span{

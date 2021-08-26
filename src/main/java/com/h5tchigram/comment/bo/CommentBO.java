@@ -19,6 +19,10 @@ public class CommentBO {
 	@Autowired
 	private UserBO userBO;
 	
+	public Comment getCommentById(int commentId) {
+		return commentDAO.selectCommentById(commentId);
+	}
+	
 	public int getCommentCountByPostId(int postId) {
 		return commentDAO.selectCommentCountByPostId(postId);
 	}
@@ -33,6 +37,13 @@ public class CommentBO {
 			comment.setProfileImagePath(user.getProfileImagePath());
 		 }
 		return commentList;
+	}
+	
+	public void insertComment(int userId, int postId, String comment) {
+		commentDAO.insertComment(userId, postId, comment);
+	}
+	public void deleteCommentById(int commentId){
+		commentDAO.deleteCommentById(commentId);
 	}
 	
 	public void deleteCommentByPostId(int postId) {

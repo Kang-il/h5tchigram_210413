@@ -3,7 +3,19 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
  <mapper namespace="com.h5tchigram.comment.dao.CommentDAO">
-
+	 <select id="selectCommentById" parameterType="int" resultType="com.h5tchigram.comment.model.Comment">
+	 	SELECT
+ 			`id`
+ 			,`userId`
+ 			,`postId`
+ 			,`comment`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`comment`
+ 		WHERE
+ 			`id`=#{commentId}
+	 </select>
  	 <select id="selectCommentCountByPostId" parameterType="int" resultType="int">
  		SELECT
  			COUNT(*)
@@ -11,7 +23,6 @@
  			`comment`
  		WHERE
  			`postId`=#{postId}
- 	
  	</select>
  	
  	<select id="selectCommentListByPostId" parameterType="int" resultType="com.h5tchigram.comment.model.Comment">
@@ -28,11 +39,38 @@
  			`postId`=#{postId}
  	</select>
  	
+ 	<insert id="insertComment" parameterType="map">
+ 		INSERT INTO
+ 			`comment`
+ 			(
+ 			`userId`
+ 			,`postId`
+ 			,`comment`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 			)
+ 		VALUES
+ 			(
+ 			#{userId}
+ 			,#{postId}
+ 			,#{comment}
+ 			,NOW()
+ 			,NOW()
+ 			)
+ 	</insert>
+ 	
+ 	<delete id="deleteCommentById" parameterType="int">
+ 		DELETE FROM
+ 			`comment`
+ 		WHERE
+ 			`id`=#{commentId}
+ 	</delete>
+ 	
  	<delete id="deleteCommentByPostId" parameterType="int">
  		DELETE FROM
  			`comment`
  		WHERE
  			`postId`=#{postId}
  	</delete>
- 	
+
  </mapper>
