@@ -16,7 +16,7 @@
 		<div class="comment-modal-description">
 			<div class="comment-modal-des1">
 				<%--글쓴이 아이디 --%>
-				<a href="/user/main_view?userId=${feedOwner.id}" class="post-owner-profile">
+				<a href="/user/feed/${feedOwner.loginId}" class="post-owner-profile">
 					
 					<%--이미지가 있을경우 --%>
 					<c:if test="${feedOwner.profileImagePath ne null }">
@@ -30,7 +30,7 @@
 					
 				</a>
 				
-				<a href="/user/main_view?userId=${feedOwner.id}" class="user-id ">${feedOwner.loginId}</a>
+				<a href="/user/feed/${feedOwner.loginId}" class="user-id ">${feedOwner.loginId}</a>
 				
 				<div class="post-menu-bar">
 					<button type="button" class="material-icons-outlined post-menu-btn" >more_horiz</button>
@@ -42,7 +42,7 @@
 			
 				<div class="description-item">
 				
-					<a class="content-user-link" href="user/main_view?userId=${feedOwner.id}">
+					<a class="content-user-link" href="/user/feed/?userId=${feedOwner.loginId}">
 						<%--이미지가 있을경우 --%>
 						<c:if test="${feedOwner.profileImagePath ne null }">
 							<img src="" class="user-profile">
@@ -54,7 +54,7 @@
 						</c:if>
 					</a>
 					
-					<a href="/user/main_view?userId=${feedOwner.id}" class="owner-id">${feedOwner.loginId}</a>
+					<a href="/user/feed/${feedOwner.loginId}" class="owner-id">${feedOwner.loginId}</a>
 					<div class="comment-modal-post-content">집에 가고 싶네여.</div>
 				</div>
 				
@@ -109,7 +109,7 @@
 				<button type="button" id="modal-emoji-picker" class="material-icons-outlined item-emoji-picker">sentiment_satisfied_alt</button>
 				
 				<div class="comment-input-box">
-					<input type="text" class="modal-comment-form" name="commentForm" >
+					<input type="text" class="modal-comment-form" name="commentForm" placeholder="댓글을 입력해 주세요..">
 				</div>
 				
 				<div class="btn-box">

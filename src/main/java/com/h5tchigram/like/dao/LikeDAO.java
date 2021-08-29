@@ -12,7 +12,10 @@ public interface LikeDAO {
 	public List<Like> selectLikeListByPostId(@Param("postId") int postId);
 	public int selectLikeCountByPostId(@Param("postId") int postId);
 	public Like selectLikeByUserIdAndPostId(@Param("userId") int userId, @Param("postId") int postId);
-	public void insertLikeByUserIdAndPostId(@Param("userId") int userId , @Param("postId") int postId);
+	
+	public void insertLikeByUserIdAndPostId(Like like);
+	
+	
 	public void deleteLikeByUserIdAndPostId(@Param("userId") int userId, @Param("postId") int postId);
 	public void deleteLikeByPostId(@Param("postId")int postId);
 }

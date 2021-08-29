@@ -69,7 +69,7 @@
  			`followingUserId`=#{followerUserId}
  	</select>
  	
- 	<insert id="insertFollow" parameterType="map">
+ 	<insert id="insertFollow" parameterType="com.h5tchigram.follow.model.Follow"  useGeneratedKeys="true" keyProperty="id">
  		INSERT INTO
  			`follow`
  			(

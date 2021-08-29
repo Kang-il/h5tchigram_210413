@@ -22,6 +22,7 @@
 
 <jsp:include page="../include/gnb.jsp"/>
 <jsp:include page="../include/modal.jsp"/>
+<jsp:include page="../include/comment_modal.jsp"/>
 
 <section class="post-section">
 	<jsp:include page="../timeline/timeline_section.jsp"></jsp:include>

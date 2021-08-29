@@ -18,7 +18,9 @@
 					
 				data.followList.map(follow =>{
 					
-					let followUserId = division=='following'? follow.followerUserId : follow.followingUserId;
+					
+					let followUserId =   division=='following'? follow.followerUserId : follow.followingUserId;
+					
 					
 					let button='';
 					
@@ -46,8 +48,8 @@
 					
 					let html='<div class="follow-member-item">'
 								+'<img src="'+imageUrl+'" class="follow-image" id="followUserImg'+followUserId+'">'
-								+'<a href="/user/main_view?userId='
-										+followUserId+'" class="follow-login-id">'
+								+'<a href="/user/feed/'
+										+follow.followUserLoginId+'" class="follow-login-id">'
 									+'<span>'+follow.followUserLoginId+'</span>'
 								+'</a>'
 								+'<div class="follow-action-button-box">'
@@ -83,10 +85,10 @@ function createLikeCount(likeList) {
 		$('.item-like-section').empty();
 		likeList.map(like => {
 			let likeProfileImagePath = like.porfileImagePath == null ? "/static/images/no_profile_image.png" : like.profileImagePath;
-			let html='<a href="/user/main_view?userId=' + like.userId + '">'
+			let html='<a href="/user/feed/' + like.userLoginId + '">'
 						+'<img src="' + likeProfileImagePath + '" class="like-profile"/>'
 					 +'</a>'
-					 + '<a href="/user/main_view?userId=' + like.userId + '" class="like-first-id ml-1">' 
+					 + '<a href="/user/feed/' + like.userLoginId + '" class="like-first-id ml-1">' 
 					 		+ like.userLoginId 
 					 + '</a>'
 					+ '<span class="ml-1">님이 좋아합니다.</span>';
@@ -100,10 +102,10 @@ function createLikeCount(likeList) {
 		
 		let likeProfileImagePath = lastLike.porfileImagePath == null ? "/static/images/no_profile_image.png" : like.profileImagePath;
 		//대략적으로 몇명이 좋아요 누른지 알게 해주는 설명
-		let html='<a href="/user/main_view?userId=' + lastLike.userId + '">'
+		let html='<a href="/user/feed/' + lastLike.userLoginId + '">'
 				+'<img src="' + likeProfileImagePath + '" class="like-profile"/>'
 			+'</a>'
-			+'<a href="/user/main_view?userId=' + lastLike.userId + '" class="like-first-id ml-1">' 
+			+'<a href="/user/feed/' + lastLike.userLoginId + '" class="like-first-id ml-1">' 
 				+ lastLike.userLoginId 
 			+'</a>'
 			+'<span class="ml-1">님 외</span>'
@@ -153,10 +155,10 @@ function createLikeList(loginCheck, likeList, followingList) {
 			//미리 html을 만들어줌
 			let html = ('<div class="like-item">'
 							+'<div>'
-								+'<a href="/user/main_view?userId=' + like.userId + '" class="like-pic-link">'
+								+'<a href="/user/feed/' + like.userLoginId + '" class="like-pic-link">'
 									+'<img src="' + likeProfileImagePath + '" id="likeUserImg' + like.userId + '" class="like-modal-user-pic">'
 								+'</a>'
-								+'<a href="/user/main_view?userId=' + like.userId + '" class="like-user-link">' + like.userLoginId + '</a>'
+								+'<a href="/user/feed/' + like.userLoginId + '" class="like-user-link">' + like.userLoginId + '</a>'
 							+'</div>'
 							+'<div>'
 								+ button //버튼 추가
@@ -184,10 +186,10 @@ function createCommentList(commentList, postUserId, myId) {
 		
 		let html='<div class="comment-item">'
 					 + '<div>'
-					 		+'<a href="/user/main_view?userId=' + comment.userId + '">'
+					 		+'<a href="/user/feed/' + comment.userLoginId + '">'
 								+ '<img src="' + profileImagePath + '" class="user-profile"/>'
 							+'</a>'
-							+ '<a href="/user/main_view?userId=' + comment.userId + '"class="comment-id">' 
+							+ '<a href="/user/feed/' + comment.userLoginId + '"class="comment-id">' 
 								+ comment.userLoginId 
 							+ '</a>'
 							+ '<span class="ml-2">' 
@@ -569,25 +571,25 @@ $(document).ready(function(){
 	
 	$('.all-contents-btn').on('click', function() {
 		let feedOwnerId = $(this).data('feed-owner-id');
-		location.href = "/user/main_view?userId=" + feedOwnerId + '&category=all';
+		location.href = "/user/feed/" + feedOwnerId + '?category=all';
 		$(this).focus();
 	});
 
 	$('.only-contents-photo-btn').on('click', function() {
 		let feedOwnerId = $(this).data('feed-owner-id');
-		location.href = "/user/main_view?userId=" + feedOwnerId + '&category=photo';
+		location.href = "/user/feed/" + feedOwnerId + '?category=photo';
 		$(this).focus();
 	});
 
 	$('.only-contents-video-btn').on('click', function() {
 		let feedOwnerId = $(this).data('feed-owner-id');
-		location.href = "/user/main_view?userId=" + feedOwnerId + '&category=video';
+		location.href = "/user/feed/" + feedOwnerId + '?category=video';
 		$(this).focus();
 	});
 
 	$('.pined-contens-btn').on('click', function() {
 		let feedOwnerId = $(this).data('feed-owner-id');
-		location.href = "/user/main_view?userId=" + feedOwnerId + '&category=pinned';
+		location.href = "/user/feed/" + feedOwnerId + '?category=pinned';
 		$(this).focus();
 	});
 
@@ -595,11 +597,11 @@ $(document).ready(function(){
 	//좋아요 리스트를 가져온다.
 	$('.modal-like-before-btn').on('click', function() {
 		let postId = $(this).data("post-id");
-
+		let userId = $(this).data("user-id");
 		$.ajax({
 			type: 'POST'
-			, data: { 'postId': postId }
-			, url: '/like/insert_like'
+			, url: '/like/set_like/'+postId
+			, data :{'userId':userId}
 			, success: function(data) {
 				if (data.result === true) {
 					//좋아요 버튼 클릭시 좋아요 버튼 전환
@@ -629,10 +631,11 @@ $(document).ready(function(){
 	//좋아요 취소
 	$('.modal-like-after-btn').on('click', function() {
 		let postId = $(this).data("post-id");
+		let userId = $(this).data("user-id");
 		$.ajax({
 			type: 'POST'
-			, data: { 'postId': postId }
-			, url: '/like/delete_like'
+			, url: '/like/set_like/'+postId
+			, data :{'userId':userId}
 			, success: function(data) {
 				if (data.result === true) {
 					//좋아요 취소 클릭시 좋아요 버튼 전환
@@ -705,7 +708,7 @@ $(document).ready(function(){
 	$(".profile-content").on('click', function() {
 		
 		let postId = $(this).data("post-id");
-
+		let userId = $(this).data("user-id");
 
 		$('.modal-comment-form').attr('id', 'commentForm' + postId);
 		$('.comment-submit-btn').attr('id', 'commentSubmitBtn' + postId);
@@ -715,6 +718,8 @@ $(document).ready(function(){
 		//좋아요를 눌렀는지 체크 하는 기능
 		$('.modal-like-before-btn').data('post-id', postId);
 		$('.modal-like-after-btn').data('post-id', postId);
+		$('.modal-like-before-btn').data('user-id', userId);
+		$('.modal-like-after-btn').data('user-id', userId);
 
 		//2. 내가 pin 을 했는지 알아야 함 --
 		$('.modal-pin-before-btn').data('post-id', postId);
@@ -782,7 +787,7 @@ $(document).ready(function(){
 				$('.go-to-post-link').attr('href', '/post/post_detail_view?postId=' + data.post.id);
 
 				// 프로필 사진 링크
-				$('.content-user-link, .user-id, .owner-id').attr('href', '/user/main_view?userId=' + data.post.userId);
+				$('.content-user-link, .user-id, .owner-id').attr('href', '/user/feed/' + data.post.userLoginId);
 				//
 				$('.user-id, .comment-id').text(data.post.userLoginId);
 				console.log(data.post.userLoginId);
@@ -1060,7 +1065,7 @@ $(document).ready(function(){
 		let followId=$(this).data('user-id');
 		let postId=$(this).data('post-id');
 		//feedOwnerId
-		let feedOwnerId=$('.all-contents-btn').data('feed-owner-id');
+		let feedOwnerId=$('.profile-info-section').data('feed-owner-id');
 		
 		$.ajax({
 			type:'POST'
@@ -1108,32 +1113,7 @@ $(document).ready(function(){
 		});
 	});
 	
-	//좋아요 목록에서 팔로잉/언팔로우
-	$('.like-unit-box').on('click','.like-section-follower-btn',function(){
-		//팔로우 취소
-		let followId=$(this).data('user-id');
-		let postId=$(this).data('post-id');
-		
-		let userId=$(this).data('like-user-login-id');
-
-		$('.unfollow-userId').text(userId);
-		
-		$('.delete-user-image').attr('src',$('#likeUserImg'+followId).attr('src'));
-		//feedOwnerId
-		let feedOwnerId=$('.all-contents-btn').data('feed-owner-id');
-		$('.follow-delete-modal-section').removeClass('d-none');
-		
-		
-		
-		$('.delete-btn').data('follow-id',followId);
-		$('.delete-btn').data('feed-owner-id',feedOwnerId);
-		
-		
-		$('.delete-btn').data('post-id',postId);
-		$('.delete-btn').data('division',null);
-		$('.delete-btn').data('URL',null);
-		
-	});
+	
 	
 	//유저 피드에 팔로우하기 버튼 클릭 시 팔로우 진행
 	$('.profile-follow-btn').on('click',function(){
@@ -1170,6 +1150,35 @@ $(document).ready(function(){
 		$('.delete-btn').data('URL',null);
 	});
 
+	//좋아요 목록에서 팔로잉/언팔로우
+	$('.like-unit-box').on('click','.like-section-follower-btn',function(){
+		//팔로우 취소
+		let followId=$(this).data('user-id');
+		let postId=$(this).data('post-id');
+		
+		let userId=$(this).data('like-user-login-id');
+
+		$('.unfollow-userId').text(userId);
+		
+		$('.delete-user-image').attr('src',$('#likeUserImg'+followId).attr('src'));
+		//feedOwnerId
+		let feedOwnerId=$('.profile-info-section').data('feed-owner-id');
+		
+		$('.follow-delete-modal-section').removeClass('d-none');
+		
+		
+		
+		$('.delete-btn').data('follow-id',followId);
+		$('.delete-btn').data('feed-owner-id',feedOwnerId);
+		
+		
+		$('.delete-btn').data('post-id',postId);
+		$('.delete-btn').data('division',null);
+		$('.delete-btn').data('URL',null);
+		
+	});
+
+
 	//삭제 버튼 클릭 시
 	$('.delete-btn').on('click',function(){
 		let followId=$(this).data('follow-id');
@@ -1179,6 +1188,7 @@ $(document).ready(function(){
 		//좋아요 목록에서 팔로우 시 null임
 		let division = $(this).data('division');
 		const URL=$(this).data('URL');
+		
 		
 		$.ajax({
 			type:'POST'
@@ -1212,7 +1222,7 @@ $(document).ready(function(){
 												,likeData.followingList);
 							}
 							,error:function(e){
-								
+								alert(e);
 							}
 						});
 						

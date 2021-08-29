@@ -11,7 +11,7 @@
 		
 			<div class="post-item-profile-section">
 				<a href="#"><img src="/static/images/dummy_profile.jpg" width="50px" class="user-info-profile"></a>
-				<a href="/user/main_view" class="post-user-id ">h5tchi</a>
+				<a href="/user/feed/h5tchi" class="post-user-id ">h5tchi</a>
 				<div class="post-menu-bar">
 					<button type="button" class="material-icons-outlined post-menu-btn">more_horiz</button>
 				</div>

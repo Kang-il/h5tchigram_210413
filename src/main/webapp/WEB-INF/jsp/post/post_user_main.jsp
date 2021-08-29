@@ -34,7 +34,7 @@
 
 		</div>
 
-		<div class="profile-info-section">
+		<div class="profile-info-section" data-feed-owner-id="${feedOwner.id}">
 
 			<div class="profile-info-frame">
 
@@ -92,14 +92,14 @@
 
 	<nav class="profile-contents-nav" data-category="${category}">
 		<button type="button" class="all-contents-btn"
-			data-feed-owner-id="${feedOwner.id}">게시물</button>
+			data-feed-owner-id="${feedOwner.loginId}">게시물</button>
 		<button type="button" class="only-contents-photo-btn"
-			data-feed-owner-id="${feedOwner.id}">사진</button>
+			data-feed-owner-id="${feedOwner.loginId}">사진</button>
 		<button type="button" class="only-contents-video-btn"
-			data-feed-owner-id="${feedOwner.id}">동영상</button>
+			data-feed-owner-id="${feedOwner.loginId}">동영상</button>
 		<c:if test="${user.id eq feedOwner.id}">
 			<button type="button" class="pined-contens-btn"
-				data-feed-owner-id="${feedOwner.id}">저장됨</button>
+				data-feed-owner-id="${feedOwner.loginId}">저장됨</button>
 		</c:if>
 	</nav>
 
@@ -111,8 +111,7 @@
 				<div class="profile-contents-row">
 			</c:if>
 
-			<div class="profile-content" data-post-id="${post.postId}"
-				data-content-type="${post.contentType}">
+			<div class="profile-content" data-post-id="${post.postId}" data-content-type="${post.contentType}" data-user-id="${post.userId}">
 				<div class="profile-contents-unit">
 					<img src="${post.imagePath}" class="post-image">
 					<div class="content-simple-info">

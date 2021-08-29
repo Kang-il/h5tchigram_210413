@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,15 +59,23 @@ public class LikeRestController {
 	}
 	
 	//TODO 로그인 체크 보내주기
-	@RequestMapping("/insert_like")
-	public Map<String,Object> insertLike(@RequestParam("postId") int postId, HttpServletRequest request){
+	@PostMapping("/set_like/{postId}")
+	public Map<String,Object> insertLike(@PathVariable("postId") int postId
+									    , @RequestParam("userId") int userId
+										, HttpServletRequest request){
 		HttpSession session =request.getSession();
 		User user=(User)session.getAttribute("user");
 		
 		Map<String,Object> result=new HashMap<>();
 		if(user!=null) {
 			//로그인 되어있을 경우 실행
-			likeBO.insertLikeByUserIdAndPostId(user.getId(), postId);
+			if(likeBO.getLikeByUserIdAndPostId(user.getId(), postId)==null) {
+				
+				likeBO.insertLikeByUserIdAndPostId(user.getId(), postId, userId);
+				
+			}else {
+				likeBO.deleteLikeByUserIdAndPostId(user.getId(), postId);
+			}
 			
 			//스택구조 후입선출 구조 이용
 			//제일 마지막에 자신을 넣음. pop을 통해 꺼내는 순간 자신의 아이디가 나옴
@@ -90,40 +100,6 @@ public class LikeRestController {
 		
 		return result;
 		
-	}
-	
-	@RequestMapping("/delete_like")
-	public Map<String,Object> deleteLike(@RequestParam("postId") int postId, HttpServletRequest request){
-		HttpSession session =request.getSession();
-		User user=(User)session.getAttribute("user");
-		
-		Map<String,Object> result=new HashMap<>();
-		if(user!=null) {
-			//로그인 되어있을 경우 실행
-			likeBO.deleteLikeByUserIdAndPostId(user.getId(), postId);
-			
-			//스택구조 후입선출 구조 이용
-			//제일 마지막에 자신을 넣음. pop을 통해 꺼내는 순간 자신의 아이디가 나옴
-			Stack<Integer> followingList=followBO.getFollowerOnlyUserId(user.getId());
-			followingList.push(user.getId());
-			
-			//::::::::::::::: 좋아요 누른 유저 목록과 그 유저를 내가 팔로우 했는지 여부를 보내줘 동적으로 값을 변경 할 예정
-			//로그인 체크 여부 
-			result.put("loginCheck",true);
-			//팔로잉 리스트
-			result.put("followingList",followingList);
-			//좋아요 목록
-			result.put("likeList", likeBO.getLikeListByPostId(postId));
-			//DB통신 결과
-			result.put("result", true);
-			
-		}else {
-			//로그인 되어있지 않을 경우
-			result.put("loginCheck",false);
-			result.put("result",false);
-		}
-		
-		return result;
 	}
 	
 	@RequestMapping("/get_like_list")

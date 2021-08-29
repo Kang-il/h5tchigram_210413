@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.h5tchigram.alert.dao.LikeAlertDAO">
+ 
+ 	<insert id="insertLikeAlert" parameterType="map">
+ 		INSERT INTO
+ 			`likeAlert`
+	 	(
+	 		`alertId`
+	 		,`postId`
+	 		,`likeId`
+	 		,`createdAt`
+	 	)
+ 		VALUES
+ 		(
+ 			#{alertId}
+ 			,#{postId}
+ 			,#{likeId}
+ 			,NOW()
+ 		)
+ 	</insert>
+ 	
+ 	<delete id="deleteLikeAlertByLikeId" parameterType="int">
+ 		DELETE FROM
+ 			`likeAlert`
+ 		WHERE
+ 			`likeId`=#{likeId}
+ 	</delete>
+ 	
+ 	<delete id="deleteLikeAlertByPostId" parameterType="int">
+ 		DELETE FROM
+ 			`likeAlert`
+ 		WHERE
+ 			`postId`=#{postId}
+ 	</delete>
+ 	
+ 	<select id="selectLikeAlertByLikeId" parameterType="int" resultType="com.h5tchigram.alert.model.LikeAlert">
+ 		SELECT 
+ 			`id`
+ 			,`alertId`
+ 			,`postId`
+ 			,`likeId`
+ 			,`createdAt`
+ 		FROM
+ 			`likeAlert`
+ 		WHERE
+ 			`likeId`=#{likeId}
+ 	</select>
+ 	
+ 	<select id="selectLikeAlertListByPostId" parameterType="int" resultType="com.h5tchigram.alert.model.LikeAlert">
+ 		SELECT 
+ 			`id`
+ 			,`alertId`
+ 			,`postId`
+ 			,`likeId`
+ 			,`createdAt`
+ 		FROM
+ 			`likeAlert`
+ 		WHERE
+ 			`postId`=#{postId}
+ 	</select>
+ 	
+ 	<select id="selectLiekAlertByAlertId" parameterType="int" resultType="com.h5tchigram.alert.model.LikeAlert">
+ 		SELECT 
+ 			`id`
+ 			,`alertId`
+ 			,`postId`
+ 			,`likeId`
+ 			,`createdAt`
+ 		FROM
+ 			`likeAlert`
+ 		WHERE
+ 			`alertId`=#{alertId}
+ 	</select>
+ 	
+ </mapper>

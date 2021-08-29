@@ -38,8 +38,9 @@
  			`userId`=#{userId}
  	</select>
  	
- 	<insert id="insertLikeByUserIdAndPostId" parameterType="map">
- 		INSERT INTO `like`
+ 	<insert id="insertLikeByUserIdAndPostId" parameterType="com.h5tchigram.like.model.Like" useGeneratedKeys="true" keyProperty="id">
+ 		INSERT INTO 
+ 			`like`
  			(
  			`userId`
  			,`postId`
@@ -54,7 +55,8 @@
  	</insert>
  	
  	<delete id="deleteLikeByUserIdAndPostId" parameterType="map">
- 		DELETE FROM `like`
+ 		DELETE FROM 
+ 			`like`
  		WHERE
  			`userId`=#{userId}
  		AND

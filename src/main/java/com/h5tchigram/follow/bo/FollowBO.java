@@ -1,6 +1,6 @@
 package com.h5tchigram.follow.bo;
 
-import java.util.List;
+import java.util.List;	
 import java.util.Stack;
 
 import org.slf4j.Logger;
@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.h5tchigram.alert.bo.FollowAlertBO;
 import com.h5tchigram.follow.dao.FollowDAO;
 import com.h5tchigram.follow.model.Follow;
 import com.h5tchigram.user.bo.UserBO;
@@ -19,6 +20,9 @@ public class FollowBO {
 	private FollowDAO followDAO;
 	@Autowired
 	private UserBO userBO;
+	@Autowired
+	private FollowAlertBO followAlertBO;
+	
 	
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
@@ -79,10 +83,25 @@ public class FollowBO {
 	}
 	
 	public void insertFollow(int followingUserId,int followerUserId) {
-		followDAO.insertFollow(followingUserId, followerUserId);
+		
+		Follow follow=new Follow();
+		follow.setFollowingUserId(followingUserId);
+		follow.setFollowerUserId(followerUserId);
+		
+		//팔로우 삽입
+		followDAO.insertFollow(follow);
+		
+		// 알람 아이디를 넣어줌
+		followAlertBO.createFollowAlert(followingUserId,followerUserId,follow.getId());
 	}
 	
 	public void deleteFollow(int followingUserId,int followerUserId) {
+		
+		Follow follow=followDAO.selectFollowByFollowingUserIdAndFollowerUserId(followingUserId, followerUserId);
+		//팔로우 알림을 지워준다.
+		followAlertBO.deleteFollowAlertByFollowId(follow.getId());
+		
 		followDAO.deleteFollow(followingUserId, followerUserId);
+		
 	}
 }

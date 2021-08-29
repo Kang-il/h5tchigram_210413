@@ -31,4 +31,8 @@ public class UserBO {
 		return userDAO.selectUserLoginIdAndProfileImagePathById(id);
 	}
 	
+	public User getUserByUserLoginId(String userLoginId) {
+		return userDAO.selectUserByUserLoginId(userLoginId);
+	}
+	
 }

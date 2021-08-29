@@ -40,12 +40,14 @@ public class CommentRestController {
 		User user=(User)session.getAttribute("user");
 		
 		if(user!=null) {//로그인 되어있는 상태
+			
+			Post post=postBO.getPostById(postId);
+			
 			//댓글 남기기
-			commentBO.insertComment(user.getId(), postId, comment);
+			commentBO.insertComment(user.getId(), postId, post.getUserId(), comment);
 			//코멘트 리스트 가져오기
 			List<Comment> commentList=commentBO.getCommentListByPostId(postId);
 			
-			Post post=postBO.getPostById(postId);
 			
 			result.put("myId", user.getId());
 			result.put("postUserId", post.getUserId());
@@ -64,6 +66,7 @@ public class CommentRestController {
 	public Map<String,Object> deleteComment(@RequestParam("commentId")int commentId
 											,@RequestParam("postId")int postId
 											,HttpServletRequest request){
+		
 		Map<String,Object> result=new HashMap<>();
 		//코멘트 지우기
 		//바뀐 코멘트 뿌리기

@@ -93,4 +93,22 @@
  		WHERE
  			`id`=#{id}
  	</select>
+ 	
+ 	<select id="selectUserByUserLoginId" parameterType="String" resultType="com.h5tchigram.user.model.User">
+ 		SELECT 
+ 			`id`
+ 			,`loginId`
+ 			,`password`
+ 			,`name`
+ 			,`nickname`
+ 			,`profileImagePath`
+ 			,`introduce`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`user`
+ 		WHERE
+ 			`loginId`=#{userLoginId}
+ 	
+ 	</select>
  </mapper>

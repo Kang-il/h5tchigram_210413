@@ -14,7 +14,7 @@ public interface UserDAO {
 	public User selectUserByLoginIdAndPassword(@Param("loginId") String loginId
 											  ,@Param("password") String password);
 	public User selectUserLoginIdAndProfileImagePathById(@Param("id") int id);
-	
 	public User selectUserById(@Param("id") int id);
 	public User seleLastLikeUserById(@Param("id") int id);
+	public User selectUserByUserLoginId(@Param("userLoginId")String userLoginId);
 }

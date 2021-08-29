@@ -10,7 +10,7 @@
 			
 				<a href="#"><img src="/static/images/dummy_profile.jpg" class="user-profile"></a>
 				
-				<a href="/user/main_view" class="user-id ">h5tchi</a>
+				<a href="/user/feed/h5tchi" class="user-id ">h5tchi</a>
 				
 				<div class="post-menu-bar">
 					<button type="button" class="material-icons-outlined post-menu-btn">more_horiz</button>

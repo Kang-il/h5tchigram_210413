@@ -33,8 +33,8 @@
 		<div class="follow-delete-info">
 			<p class="title">언팔로우 하시겠어요?</p>
 			<p class="description">
-				<span class="unfollow-userId">h5tchi</span>님은 회원님이<br>언팔로우 한
-				사실을 알 수 없습니다.
+				<span class="unfollow-userId">h5tchi</span>
+				님은 회원님이<br>언팔로우 한 사실을 알 수 없습니다.
 			</p>
 		</div>
 		<hr class="m-0">

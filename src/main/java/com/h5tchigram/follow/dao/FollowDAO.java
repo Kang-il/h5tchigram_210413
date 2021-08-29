@@ -22,9 +22,8 @@ public interface FollowDAO {
 			@Param("followingUserId") int followingUserId
 			,@Param("followerUserId") int followerUserId);
 	
-	public void insertFollow(@Param("followingUserId") int followingUserId
-							,@Param("followerUserId") int followerUserId
-							);
+	public void insertFollow(Follow follow);
+	
 	public void deleteFollow(@Param("followingUserId") int followingUserId
 							,@Param("followerUserId") int followerUserId
 							);

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+ <mapper namespace="com.h5tchigram.alert.dao.FollowAlertDAO">
+ 
+ 	<insert id="insertFollowAlert" parameterType="map">
+ 		INSERT INTO
+ 			`followAlert`
+ 		(
+ 		`alertId`
+ 		,`followId`
+ 		,`createdAt`
+ 		)
+ 		VALUES
+ 		(
+ 		#{alertId}
+ 		,#{followId}
+ 		,NOW()
+ 		)
+ 	</insert>
+ 	
+ 	<delete id="deleteFollowAlertByFollowId" parameterType="int">
+ 		DELETE FROM
+ 			`followAlert`
+ 		WHERE
+ 			`followId`= #{followId}
+ 	</delete>
+ 	
+ 	<select id="selectFollowAlertByFollowId" parameterType="int" resultType="com.h5tchigram.alert.model.FollowAlert">
+ 		SELECT
+ 			`id`
+ 			,`alertId`
+ 			,`followId`
+ 			,`createdAt`
+ 		FROM
+ 			`followAlert`
+ 		WHERE
+ 			`followId`=#{followId}
+ 	</select>
+ 	
+ 	<select id="selectFollowAlertByAlertId" parameterType="int" resultType="com.h5tchigram.alert.model.FollowAlert">
+ 		SELECT
+ 			`id`
+ 			,`alertId`
+ 			,`followId`
+ 			,`createdAt`
+ 		FROM
+ 			`followAlert`
+ 		WHERE
+ 			`alertId`=#{alertId}
+ 	</select>
+ </mapper>

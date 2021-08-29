@@ -87,8 +87,8 @@ public class FollowRestController {
 	}
 
 	@PostMapping("/do_follow")
-	public Map<String, Object> doFollow(@RequestParam("followId") int followId,
-										@RequestParam("feedOwnerId") int feedOwnerId
+	public Map<String, Object> doFollow(@RequestParam("followId") int followId
+										,@RequestParam(value="feedOwnerId",required=false) Integer feedOwnerId
 										,HttpServletRequest request) {
 		
 		Map<String, Object> result = new HashMap<>();
@@ -102,17 +102,18 @@ public class FollowRestController {
 
 				// 내가 팔로우 하지 않은 상태에서만 팔로우를 진행 할 것이다.
 				followBO.insertFollow(user.getId(), followId);
-
-				if (user.getId() == feedOwnerId) {// 내 피드
-					
-					int followingCount = followBO.getFollowCountByFollowingUserId(user.getId());
-					int followerCount = followBO.getFollowCountByFollowerUserId(user.getId());
-					result.put("followingCount", followingCount);
-					result.put("followerCount", followerCount);
-					result.put("checkMyFeed", true);
-					
-				} else {//내 피드 아님
-					result.put("checkMyFeed", false);
+				if(feedOwnerId!=null) {
+					if (user.getId() == feedOwnerId) {// 내 피드
+						
+						int followingCount = followBO.getFollowCountByFollowingUserId(user.getId());
+						int followerCount = followBO.getFollowCountByFollowerUserId(user.getId());
+						result.put("followingCount", followingCount);
+						result.put("followerCount", followerCount);
+						result.put("checkMyFeed", true);
+						
+					} else {//내 피드 아님
+						result.put("checkMyFeed", false);
+					}
 				}
 				result.put("result", true);
 				
@@ -129,8 +130,8 @@ public class FollowRestController {
 	}
 
 	@RequestMapping("/do_unfollow")
-	public Map<String, Object> doUnFollow(@RequestParam("followId") int followId,
-										  @RequestParam("feedOwnerId") int feedOwnerId
+	public Map<String, Object> doUnFollow(@RequestParam("followId") int followId
+										, @RequestParam(value="feedOwnerId",required=false) Integer feedOwnerId
 										, HttpServletRequest request) {
 		
 		Map<String, Object> result = new HashMap<>();
@@ -143,17 +144,17 @@ public class FollowRestController {
 			if (followBO.getFollowByFollowingUserIdAndFollowerUserId(user.getId(), followId) != null) {//팔로우 하고있다.
 				// 팔로우 한 상대여야 팔로우 취소를 진행 할 것이다.
 				followBO.deleteFollow(user.getId(), followId);
-
-				if (user.getId() == feedOwnerId) {// 내 피드라는 뜻
-					int followingCount = followBO.getFollowCountByFollowingUserId(user.getId());
-					int followerCount = followBO.getFollowCountByFollowerUserId(user.getId());
-					result.put("checkMyFeed", true);
-					result.put("followingCount", followingCount);
-					result.put("followerCount", followerCount);
-				}else {//내 피드가 아님
-					result.put("checkMyFeed", false);
+				if(feedOwnerId!=null) {
+					if (user.getId() == feedOwnerId) {// 내 피드라는 뜻
+						int followingCount = followBO.getFollowCountByFollowingUserId(user.getId());
+						int followerCount = followBO.getFollowCountByFollowerUserId(user.getId());
+						result.put("checkMyFeed", true);
+						result.put("followingCount", followingCount);
+						result.put("followerCount", followerCount);
+					}else {//내 피드가 아님
+						result.put("checkMyFeed", false);
+					}
 				}
-				
 				//언팔로우 성공
 				result.put("result", true);
 				

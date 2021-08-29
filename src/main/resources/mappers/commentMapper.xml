@@ -39,7 +39,21 @@
  			`postId`=#{postId}
  	</select>
  	
- 	<insert id="insertComment" parameterType="map">
+ 	<select id="selectCommentAlertByAlertId" parameterType="int" resultType="com.h5tchigram.comment.model.Comment">
+ 		SELECT
+ 			`id`
+ 			,`userId`
+ 			,`postId`
+ 			,`comment`
+ 			,`createdAt`
+ 			,`updatedAt`
+ 		FROM
+ 			`comment`
+ 		WHERE
+ 			`alertId`=#{alertId}
+ 	</select>
+ 	
+ 	<insert id="insertComment" parameterType="com.h5tchigram.comment.model.Comment" useGeneratedKeys="true" keyProperty="id">
  		INSERT INTO
  			`comment`
  			(

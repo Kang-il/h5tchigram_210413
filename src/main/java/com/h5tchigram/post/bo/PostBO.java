@@ -81,6 +81,10 @@ public class PostBO {
 		return post;
 	}
 	
+	public Post getOnlyPostById(int id) {
+		return postDAO.selectPostByPostId(id);
+	}
+	
 	public List<PostThumbnail> getPostThumbnailListByOwnerId(int ownerId,String category){
 		
 		List<PostThumbnail> postThumbnailList=postDAO.selectPostThumbnailListByOwnerId(ownerId,category);
