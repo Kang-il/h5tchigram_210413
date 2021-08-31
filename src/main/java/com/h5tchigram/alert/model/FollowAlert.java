@@ -2,7 +2,7 @@ package com.h5tchigram.alert.model;
 
 import java.util.Date;
 
-public class FollowAlert implements AlertTimeline{
+public class FollowAlert implements AlertTimeLine{
 	//alert TABLE 정보
 	private int alertId;// FK -- Alert TABLE에서 참조
 	private String alertType;

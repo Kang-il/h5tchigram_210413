@@ -37,9 +37,6 @@
 		<c:if test="${user ne null}">
 			<div class="header-nav-box mt-2">
 					<button class="menu-item"><span class="material-icons icon-item"> home </span></button> 
-					<button class="menu-item"><span class="material-icons-outlined icon-item"> email </span></button> 
-					<button class="menu-item"><span class="material-icons-outlined icon-item"> explore </span></button>
-					
 					<div class="alert-item-box">
 						<button class="menu-item alert-item"><span class="material-icons-outlined icon-item"> favorite_border </span></button>
 						<div class="nav-alert-modal d-none">
@@ -102,103 +99,6 @@
 						</div>
 					</div>
 					
-					<script>
-						$(document).ready(function(){
-							
-							$('.alert-modal-follow-btn-box').on('click','.alert-modal-unfollow-btn',function(){
-								let sendUserId=$(this).data('send-user-id');
-								let sendUserProfileImagePath=$(this).data('send-user-profile-image');
-								let sendUserLoginId=$(this).data('send-user-login-id');
-
-								
-								$('.alert-follow-delete-section').removeClass('d-none');
-								$('body').addClass('no-scrollbar');
-								
-								let profileImagePath = sendUserProfileImagePath == '' ? '/static/images/no_profile_image.png' : sendUserProfileImagePath;
-								
-								$('.alert-delete-user-image').attr('src', profileImagePath);
-								$('.unfollow-userId').text(sendUserLoginId);
-								
-								
-								$('.alert-delete-btn').data('send-user-id',sendUserId);
-								$('.alert-delete-btn').data('send-user-profile-image',sendUserProfileImagePath);
-								$('.alert-delete-btn').data('send-user-login-id',sendUserLoginId);
-
-								
-							});
-							
-							$('.alert-delete-btn').on('click',function(){
-								
-								let sendUserId = $(this).data('send-user-id');
-								let sendUserProfileImagePath = $(this).data('send-user-profile-image');
-								let sendUserLoginId = $(this).data('send-user-login-id');
-
-								$.ajax({
-									type:'POST'
-									,data:{'followId':sendUserId}
-									,url:'/follow/do_unfollow'
-									,success:function(data){
-										if(data.loginCheck===true){
-											$('#alertModalFollowBtnBox'+sendUserId).empty();
-											
-											let html ='<button class="alert-modal-follow-btn" data-send-user-id="'+sendUserId
-														+'" data-send-user-profile-image="'+sendUserProfileImagePath
-														+'" data-send-user-login-id="'+sendUserLoginId+'">팔로잉</button>';
-														
-											$('#alertModalFollowBtnBox'+sendUserId).append(html);
-										}
-									}
-									,error: function(e){
-										alert(e);
-									}
-								});
-								
-								$('.alert-follow-delete-section').addClass('d-none');
-								$('body').removeClass('no-scrollbar');
-								
-							});
-							
-							$('.alert-modal-follow-btn-box').on('click','.alert-modal-follow-btn',function(){
-								let sendUserId = $(this).data('send-user-id');
-								let sendUserProfileImagePath = $(this).data('send-user-profile-image');
-								let sendUserLoginId = $(this).data('send-user-login-id');
-								
-								$.ajax({
-									type:'POST'
-									,data:{'followId':sendUserId}
-									,url:'/follow/do_follow'
-									,success:function(data){
-											if(data.loginCheck===true){
-												$('#alertModalFollowBtnBox'+sendUserId).empty();
-												
-												let html ='<button class="alert-modal-unfollow-btn"data-send-user-id="'+sendUserId
-															+'" data-send-user-profile-image="'+sendUserProfileImagePath
-															+'" data-send-user-login-id="'+sendUserLoginId+'">팔로잉</button>';
-												
-												$('#alertModalFollowBtnBox'+sendUserId).append(html);
-											}
-									}
-									,error: function(e){
-											alert(e);
-									}
-								});
-							});
-							
-							$('.alert-cancel-btn').on('click',function(){
-								$('.alert-follow-delete-section').addClass('d-none');
-								$('body').removeClass('no-scrollbar');
-							});
-							
-							$('.alert-follow-delete-section').on('click',function(e){
-								if(!$('.alert-follow-delete-box').has(e.target).length){
-									$('.alert-follow-delete-section').addClass('d-none');
-									$('body').removeClass('no-scrollbar');
-								}
-							});
-							
-						});
-					</script>
-					
 					<div class="profile-item-box pb-1">
 						<button type="button" class="profile-btn">
 							<c:if test="${user.profileImagePath eq null}">
@@ -217,7 +117,7 @@
 							</div>
 							
 							<div class="modal-nav-item">
-								<span class="material-icons-outlined">turned_in_not</span><a href="#">저장됨</a>
+								<span class="material-icons-outlined">turned_in_not</span><a href="/user/feed/${user.loginId}?category=pinned">저장됨</a>
 							</div>
 							
 							<div class="modal-nav-item">

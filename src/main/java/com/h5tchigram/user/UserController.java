@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.h5tchigram.alert.bo.AlertTimelineBO;
-import com.h5tchigram.alert.model.AlertTimeline;
+import com.h5tchigram.alert.model.AlertTimeLine;
 import com.h5tchigram.follow.bo.FollowBO;
 import com.h5tchigram.follow.model.Follow;
 import com.h5tchigram.post.bo.PostBO;
@@ -36,7 +36,7 @@ public class UserController {
 	@Autowired
 	private FollowBO followBO;
 	@Autowired
-	private AlertTimelineBO alertTimelineBO;
+	private AlertTimelineBO alertTimeLineBO;
 	
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
@@ -94,7 +94,7 @@ public class UserController {
 		
 		if(user!=null) {
 			//로그인 되어있는경우 자신의 알람을 뿌린다.
-			List<AlertTimeline> alertTimelineList=alertTimelineBO.getAlertListByReceiveUserId(user.getId());
+			List<AlertTimeLine> alertTimelineList=alertTimeLineBO.getAlertListByReceiveUserId(user.getId());
 			model.addAttribute("alertList",alertTimelineList);
 			
 			if(checkUrl==-1) {//잘못된 경로를 입력했는데 로그인이 되어있는 경우

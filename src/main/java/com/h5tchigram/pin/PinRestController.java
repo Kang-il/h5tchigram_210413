@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.h5tchigram.pin.bo.pinBO;
+import com.h5tchigram.pin.bo.PinBO;
 import com.h5tchigram.user.model.User;
 
 @RequestMapping("/pin")
@@ -19,7 +19,7 @@ import com.h5tchigram.user.model.User;
 public class PinRestController {
 
 	@Autowired
-	private pinBO pinBO;
+	private PinBO pinBO;
 	
 	@RequestMapping("/check_pin")
 	public Map<String,Boolean> checkPin(@RequestParam("postId") int postId

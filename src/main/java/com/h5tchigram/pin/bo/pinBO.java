@@ -9,7 +9,7 @@ import com.h5tchigram.pin.dao.PinDAO;
 import com.h5tchigram.pin.model.Pin;
 
 @Service
-public class pinBO {
+public class PinBO {
 	@Autowired
 	private PinDAO pinDAO;
 

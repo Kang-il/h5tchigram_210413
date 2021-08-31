@@ -14,7 +14,7 @@ public interface LikeAlertDAO {
 							   ,@Param("likeId") int likeId);
 	
 	public LikeAlert selectLikeAlertByLikeId(@Param("likeId") int likeId);
-	public List<LikeAlert> selectLikeAlertListByPostId(@Param("posTId") int postId);
+	public List<LikeAlert> selectLikeAlertListByPostId(@Param("postId") int postId);
 	public LikeAlert selectLiekAlertByAlertId(@Param("alertId") int alertId);
 	
 	public void deleteLikeAlertByLikeId(@Param("likeId")int likeId);

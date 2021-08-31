@@ -2,7 +2,7 @@ package com.h5tchigram.alert.model;
 
 import java.util.Date;
 
-public class CommentAlert implements AlertTimeline{
+public class CommentAlert implements AlertTimeLine{
 	//alert TABLE 정보
 	private int alertId;// FK -- Alert TABLE에서 참조
 	private	String alertType;

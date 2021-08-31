@@ -1,10 +1,12 @@
 package com.h5tchigram.timeline.model;
 
+import java.util.Date;
+
 public class TimeLine {
 	private int id;
 	private int postId;
 	private int userId;
-	private int createdAt;
+	private Date createdAt;
 	
 	public int getId() {
 		return id;
@@ -24,10 +26,10 @@ public class TimeLine {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public int getCreatedAt() {
+	public Date getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(int createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 	

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.h5tchigram.alert.model.Alert;
-import com.h5tchigram.alert.model.AlertTimeline;
+import com.h5tchigram.alert.model.AlertTimeLine;
 import com.h5tchigram.alert.model.CommentAlert;
 import com.h5tchigram.alert.model.FollowAlert;
 import com.h5tchigram.alert.model.LikeAlert;
@@ -40,9 +40,9 @@ public class AlertTimelineBO {
 	@Autowired
 	private LikeAlertBO likeAlertBO;
 	
-	public List<AlertTimeline> getAlertListByReceiveUserId(int receiveUserId){
+	public List<AlertTimeLine> getAlertListByReceiveUserId(int receiveUserId){
 		List<Alert> alertList=alertBO.getAlertListByReceiveUserId(receiveUserId);
-		List<AlertTimeline> alertTimelineList= new ArrayList<>();
+		List<AlertTimeLine> alertTimelineList= new ArrayList<>();
 		
 		for( Alert alert : alertList ) {
 			
