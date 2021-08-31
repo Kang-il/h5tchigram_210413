@@ -24,6 +24,18 @@
  			`postId`=#{postId}
  	</select>
  	
+ 	<select id="selectLikeListByUserId" parameterType="int" resultType="com.h5tchigram.like.model.Like">
+ 		SELECT
+ 			`id`
+ 			,`userId`
+ 			,`postId`
+ 			,`createdAt`
+ 		FROM
+ 			`like`
+ 		WHERE 
+ 			`userId`=#{userId}
+ 	</select>
+ 	
  	<select id="selectLikeByUserIdAndPostId" parameterType="map" resultType="com.h5tchigram.like.model.Like">
  		SELECT
  			`id`

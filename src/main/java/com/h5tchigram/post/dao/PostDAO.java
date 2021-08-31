@@ -17,12 +17,9 @@ public interface PostDAO {
 	public List<PostThumbnail> selectPostThumbnailListByOwnerId(@Param("ownerId") int ownerId
 																,@Param("category")String category
 																);
+	public List<PostThumbnail> selectPostThumbnailForDetailViewByUserId(@Param("userId") int userId);
 	public PostThumbnail selectPostThumbnailByPostId(@Param("postId") int postId);
 	
-	public int insertPost(@Param("userId") int userId
-						 ,@Param("contentType") String contentType
-						 ,@Param("content") String content
-						 ,@Param("imagePath") String imagePath
-						 );
+	public int insertPost(Post post);
 	public void deletePost(@Param("postId") int postId);
 }

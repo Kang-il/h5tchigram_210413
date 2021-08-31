@@ -21,6 +21,7 @@
 
 	<jsp:include page="../include/gnb.jsp"/>
 	<jsp:include page="../include/modal.jsp"/>
+	<jsp:include page="../include/comment_modal.jsp"></jsp:include>
 	
 	<section class="post-section">
 		<jsp:include page="../post/post_user_main.jsp"></jsp:include>

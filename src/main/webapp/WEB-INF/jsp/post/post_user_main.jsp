@@ -5,10 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<jsp:include page="../include/modal.jsp" />
-<jsp:include page="../include/follow_modal.jsp" />
-<jsp:include page="../include/comment_modal.jsp"/>
-
 <div class="profile-section">
 	<div class="profile-divide-section">
 
@@ -124,8 +120,8 @@
 			</div>
 
 			<c:if test="${status.index % 3 eq 2 }">
-	</div>
-	</c:if>
+				</div>
+			</c:if>
 	</c:forEach>
 </div>
 </div>

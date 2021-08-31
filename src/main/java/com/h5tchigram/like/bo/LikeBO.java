@@ -34,6 +34,11 @@ public class LikeBO {
 		return likeList;
 	}
 
+	public List<Like> getLikeListByUserId(int userId){
+		List<Like> likeList=likeDAO.selectLikeListByUserId(userId);
+		return likeList;
+	}
+	
 	public int getLikeCountByPostId(int postId) {
 		return likeDAO.selectLikeCountByPostId(postId);
 	}

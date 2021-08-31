@@ -10,6 +10,8 @@ import com.h5tchigram.like.model.Like;
 @Repository
 public interface LikeDAO {
 	public List<Like> selectLikeListByPostId(@Param("postId") int postId);
+	public List<Like> selectLikeListByUserId(@Param("userId") int userId);
+	
 	public int selectLikeCountByPostId(@Param("postId") int postId);
 	public Like selectLikeByUserIdAndPostId(@Param("userId") int userId, @Param("postId") int postId);
 	

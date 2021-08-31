@@ -21,7 +21,7 @@
 				</a>
 				
 				<div class="user-info-item">
-					<a href="#" class="user-info-id">${user.loginId}</a>
+					<a href="/user/feed/${user.loginId}" class="user-info-id">${user.loginId}</a>
 					<p class="user-info-introduce">${user.nickname}</p>	
 				</div>
 			</c:if>

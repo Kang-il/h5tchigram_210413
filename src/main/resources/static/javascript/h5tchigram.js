@@ -1,7 +1,100 @@
 /**
  * 
  */
- 
+ function getCommentModalPost(postId,userId){
+	$('.modal-comment-form').attr('id', 'commentForm' + postId);
+	$('.comment-submit-btn').attr('id', 'commentSubmitBtn' + postId);
+
+	//1.내가 좋아요를 눌렀는지 알아야 함
+	//userId--세션에서 가져감 postId만 전송
+	//좋아요를 눌렀는지 체크 하는 기능
+	$('.modal-like-before-btn').data('post-id', postId);
+	$('.modal-like-after-btn').data('post-id', postId);
+	 $('.modal-like-before-btn').data('user-id', userId);
+	 $('.modal-like-after-btn').data('user-id', userId);
+
+	 //2. 내가 pin 을 했는지 알아야 함 --
+	 $('.modal-pin-before-btn').data('post-id', postId);
+	 $('.modal-pin-after-btn').data('post-id', postId);
+
+	 $.ajax({
+		 type: 'GET'
+		 , url: '/pin/check_pin'
+		 , data: { 'postId': postId }
+		 , success: function(data) {
+			 if (data.result === true) {//저장되어있음
+				 $('.modal-pin-before-btn').addClass('d-none');
+				 $('.modal-pin-after-btn').removeClass('d-none');
+			 } else if (data.result === false) {
+				 $('.modal-pin-after-btn').addClass('d-none');
+				 $('.modal-pin-before-btn').removeClass('d-none');
+			 }
+		 }
+		 , error: function(e) {
+			 alert(e);
+		 }
+	 });
+
+	 //다른 게시물 클릭 시 input 창에 쓰여져있는 텍스트를 모두 지워준다
+	 $('.modal-comment-form').val('');
+
+	 //좋아요 체크 ajax
+	 $.ajax({
+		 type: 'GET'
+		 , url: '/like/check_like'
+		 , data: { 'postId': postId }
+		 , success: function(data) {
+
+			 if (data.result === true) {//좋아요 누름
+				 $('.modal-like-before-btn').addClass('d-none');
+				 $('.modal-like-after-btn').removeClass('d-none');
+			 } else {
+				 $('.modal-like-before-btn').removeClass('d-none');
+				 $('.modal-like-after-btn').addClass('d-none');
+			 }
+		 }
+		 , error: function(e) {
+			 alert(e);
+		 }
+	 });
+
+	 //포스트의 정보를 가져오는 포스트
+	 $.ajax({
+		 type: "post"
+		 , url: '/post/get_post'
+		 , data: { 'postId': postId }
+		 , success: function(data) {
+
+			 //게시물 이미지
+			 $('.comment-modal-content-picture').attr('src', data.post.imagePath);
+
+			 //포스트 지우는 링크에 값을 넣어줌
+			 $('.delete-link').attr('href', '/post/delete_post?postId=' + data.post.id);
+
+			 //게시물 상세보기 페이지 이동
+			 $('.go-to-post-link').attr('href','/post/post_detail_view?postId=' + data.post.id);
+
+			 // 프로필 사진 링크
+			 $('.content-user-link, .user-id, .owner-id').attr('href', '/user/feed/' + data.post.userLoginId);
+			 //
+			 $('.user-id, .comment-id').text(data.post.userLoginId);
+			 $('.comment-modal-post-content').text(data.post.content);
+			 $('.comment-submit-btn').data('post-id', postId);
+			 $('.item-emoji-picker').data('post-id', postId);
+
+
+			 createCommentList(data.post.commentList, data.post.userId, data.myId);
+
+			 //라이크 대략적으로 몇명인지 작성해주는 메서드
+			 createLikeCount(data.post.likeList);
+
+			 //라이크 리스트를 작성해주는 메서드
+			 createLikeList(data.loginCheck, data.post.likeList, data.followingList);
+
+		 }
+	 });
+
+}
  function getFollowList(feedOwnerId,division,URL){
 	$('.follow-members-section').empty();
 	$.ajax({
@@ -335,8 +428,12 @@ function createCommentList(commentList, postUserId, myId) {
  	//모달창 종료 (게시글 메뉴창에 취소버튼을 눌렀을 경우)
 	function cancelModal(){
 		$('.menu-modal-section').addClass('d-none');
+		$('.menu-modal-section-not-owner').addClass('d-none');
 		$('.comment-description-modal').addClass('d-none');
-		$('body').removeClass('no-scrollbar');
+		$('.detail-comment-description-modal').addClass('d-none');
+		if($('.comment-modal-section').hasClass('d-none')){
+			$('body').removeClass('no-scrollbar');			
+		}
  	}
 
  	//emoji picker 메서드
@@ -406,7 +503,7 @@ $(document).ready(function(){
 	
 	//로그인 패스워드 창 감지하여 값이 모두 입력되어있지 않으면 버튼 비활성화 시킬 것
 	//keyup 이나 keydown으로 이벤트를 가져오면 알림div나 버튼의 비활성화가 적절하게 이루어지지 않았다.
-	$('#loginId , #loginPassword').on('input',function(e){
+	$('#loginId , #loginPassword').on('input',function(){
 
 		$('.login-alert-box').addClass('d-none');
 		let loginId=$('#loginId').val().trim();
@@ -483,17 +580,32 @@ $(document).ready(function(){
 		$('.nav-profile-modal').addClass('d-none');
 	});
 	
-	$('.post-menu-btn').on('focus',function(){
-		$('.menu-modal-section').removeClass('d-none');
-		$('.detail-info').addClass('d-none');
-		$('body').addClass('no-scrollbar');
+	$('.post-menu-btn').on('click',function(){
+		let postId =$(this).data('post-id');
+		$('.go-to-post-link').attr('href','/post/post_detail_view?postId='+postId);
+		if(!$(this).hasClass('not-my-post')){
+			$('.menu-modal-section').removeClass('d-none');
+			$('body').addClass('no-scrollbar');
+		}else{
+			$('.menu-modal-section-not-owner').removeClass('d-none');
+			$('body').addClass('no-scrollbar');
+		}
 
+	});
+	
+	$('.menu-modal-section-not-owner').on('click',function(e){
+		if(!$('.menu-modal-box-not-owner').has(e.target).length){
+			$('.menu-modal-section-not-owner').addClass('d-none');
+			//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
+			if($('.comment-modal-section').hasClass('d-none')===true){ 
+				$('body').removeClass('no-scrollbar');
+			}
+		}
 	});
 	
 	$('.menu-modal-section').on('click',function(e){
 		if(!$('.menu-modal-box').has(e.target).length){
 			$('.menu-modal-section').addClass('d-none');
-			$('.detail-info').removeClass('d-none');
 			//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
 			if($('.comment-modal-section').hasClass('d-none')===true){ 
 				$('body').removeClass('no-scrollbar');
@@ -512,11 +624,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#showDetail').on('focus',function(){
-		$('.comment-modal-section').removeClass('d-none');
-		$('body').addClass('no-scrollbar');
-
-	});
+	
 	
 	$('.comment-modal-section').on('click',function(e){
 		if(!$('.comment-modal-box').has(e.target).length){
@@ -525,6 +633,7 @@ $(document).ready(function(){
 			$('.content-simple-info').removeClass('d-none');
 			$('body').removeClass('no-scrollbar');
 			$('.comments-box').empty();
+			location.reload();
 			
 		}
 	});
@@ -565,8 +674,6 @@ $(document).ready(function(){
 		$('.comment-delete-button').data('comment-id',commentId);
 		$('.comment-delete-button').data('post-id',postId);
 		$('body').addClass('no-scrollbar');
-
-
 	});
 	
 	$('.all-contents-btn').on('click', function() {
@@ -664,7 +771,6 @@ $(document).ready(function(){
 	$('.modal-pin-before-btn').on('click', function() {
 		//저장하기 클릭
 		let postId = $(this).data('post-id');
-		console.log(postId);
 		$.ajax({
 			type: 'get'
 			, url: '/pin/create_pin'
@@ -710,104 +816,7 @@ $(document).ready(function(){
 		let postId = $(this).data("post-id");
 		let userId = $(this).data("user-id");
 
-		$('.modal-comment-form').attr('id', 'commentForm' + postId);
-		$('.comment-submit-btn').attr('id', 'commentSubmitBtn' + postId);
-
-		//1.내가 좋아요를 눌렀는지 알아야 함
-		//userId--세션에서 가져감 postId만 전송
-		//좋아요를 눌렀는지 체크 하는 기능
-		$('.modal-like-before-btn').data('post-id', postId);
-		$('.modal-like-after-btn').data('post-id', postId);
-		$('.modal-like-before-btn').data('user-id', userId);
-		$('.modal-like-after-btn').data('user-id', userId);
-
-		//2. 내가 pin 을 했는지 알아야 함 --
-		$('.modal-pin-before-btn').data('post-id', postId);
-		$('.modal-pin-after-btn').data('post-id', postId);
-
-		$.ajax({
-			type: 'GET'
-			, url: '/pin/check_pin'
-			, data: { 'postId': postId }
-			, success: function(data) {
-				if (data.result === true) {//저장되어있음
-					$('.modal-pin-before-btn').addClass('d-none');
-					$('.modal-pin-after-btn').removeClass('d-none');
-				} else if (data.result === false) {
-					$('.modal-pin-after-btn').addClass('d-none');
-					$('.modal-pin-before-btn').removeClass('d-none');
-				}
-			}
-			, error: function(e) {
-				alert(e);
-			}
-
-
-
-		});
-
-
-		//다른 게시물 클릭 시 input 창에 쓰여져있는 텍스트를 모두 지워준다
-		$('.modal-comment-form').val('');
-
-		//좋아요 체크 ajax
-		$.ajax({
-			type: 'GET'
-			, url: '/like/check_like'
-			, data: { 'postId': postId }
-			, success: function(data) {
-
-				if (data.result === true) {//좋아요 누름
-					$('.modal-like-before-btn').addClass('d-none');
-					$('.modal-like-after-btn').removeClass('d-none');
-				} else {
-					$('.modal-like-before-btn').removeClass('d-none');
-					$('.modal-like-after-btn').addClass('d-none');
-				}
-			}
-			, error: function(e) {
-				alert(e);
-			}
-		});
-
-		//포스트의 정보를 가져오는 포스트
-		$.ajax({
-			type: "post"
-			, url: '/post/get_post'
-			, data: { 'postId': postId }
-			, success: function(data) {
-
-				//게시물 이미지
-				$('.comment-modal-content-picture').attr('src', data.post.imagePath);
-
-				//포스트 지우는 링크에 값을 넣어줌
-				$('.delete-link').attr('href', '/post/delete_post?postId=' + data.post.id);
-
-				//게시물 상세보기 페이지 이동
-				$('.go-to-post-link').attr('href', '/post/post_detail_view?postId=' + data.post.id);
-
-				// 프로필 사진 링크
-				$('.content-user-link, .user-id, .owner-id').attr('href', '/user/feed/' + data.post.userLoginId);
-				//
-				$('.user-id, .comment-id').text(data.post.userLoginId);
-				console.log(data.post.userLoginId);
-				$('.comment-modal-post-content').text(data.post.content);
-				$('.comment-submit-btn').data('post-id', postId);
-
-				$('.item-emoji-picker').data('post-id', postId);
-
-
-				createCommentList(data.post.commentList, data.post.userId, data.myId);
-
-				//라이크 대략적으로 몇명인지 작성해주는 메서드
-				createLikeCount(data.post.likeList);
-
-				//라이크 리스트를 작성해주는 메서드
-				createLikeList(data.loginCheck, data.post.likeList, data.followingList);
-
-			}
-		});
-
+		getCommentModalPost(postId,userId);
 	});
 
 
@@ -852,6 +861,9 @@ $(document).ready(function(){
 		let commentId=$(this).data('comment-id');
 		let postId=$(this).data('post-id');
 		
+		
+	
+		
 		$.ajax({
 			type:'POST'
 			,url:'/comment/delete_comment'
@@ -863,6 +875,13 @@ $(document).ready(function(){
 					createCommentList(data.commentList,data.postUserId,data.myId);
 					$('body').removeClass('no-scrollbar');
 					$('.comment-description-modal').addClass('d-none');
+					$('#showTimelinePostDetail'+postId).text('댓글'+(data.commentList.length)+'개 모두보기');
+						if( $('.comment-modal-section').hasClass('d-none') ){
+							$('body').removeClass('no-scrollbar');			
+						}else{
+							$('body').addClass('no-scrollbar');
+						}
+					
 				}else{
 					location.href='/user/sign_in_view';
 				}
@@ -870,8 +889,12 @@ $(document).ready(function(){
 			,error:function(e){
 				alert(e);
 			}
+			
+			
+			
 		});
 		
+	
 		
 	});
 
@@ -953,6 +976,7 @@ $(document).ready(function(){
 				location.href = '/timeline/timeline_view';
 			}
 			, error: function(e) {
+				alert(e);
 				alert('메모저장 실패 관리자에게 문의하세요');
 			}
 		});
@@ -1091,13 +1115,12 @@ $(document).ready(function(){
 						,data:{'postId':postId}
 						,url:'/like/get_like_list'
 						,success:function(likeData){
-							console.log(likeData.loginCheck,likeData.likeList,likeData.followingList)
 							createLikeList(likeData.loginCheck
 											,likeData.likeList
 											,likeData.followingList);
 						}
 						,error:function(e){
-							
+							alert(e);
 						}
 					});
 					
@@ -1124,7 +1147,9 @@ $(document).ready(function(){
 			,data:{'followId':followId,
 				   'feedOwnerId':followId}
 			,success:function(data){
-				location.reload();
+				if(data.result===true){
+					location.reload();
+				}
 			}
 			,error:function(e){
 				alert(e);
@@ -1247,6 +1272,8 @@ $(document).ready(function(){
 	});
 	
 	
+	
+	
 	$('.follow-modal-section').on('click',function(e){
 		if(!$('.follow-modal-box').has(e.target).length){
 			
@@ -1271,11 +1298,397 @@ $(document).ready(function(){
 		}
 	});
 	
+	//-------------timeLineView---------------------------
+	$('.post-item-action-button').on('click', '.timeline-like-after-btn', function() {
+		//좋아요 취소
+		let postId = $(this).data('post-id');
+		let userId = $(this).data('post-user-id');
+
+
+		$.ajax({
+			type: 'POST'
+			, url: '/like/set_like/' + postId
+			, data: { 'userId': userId }
+			, success: function(data) {
+				if (data.result === true) {
+					//성공 시 새로고침
+					location.reload();
+				}
+			}
+
+		});
+	});
+
+	$('.post-item-action-button').on('click', '.timeline-like-before-btn', function() {
+		//좋아요 하기
+		let postId = $(this).data('post-id');
+		let userId = $(this).data('post-user-id');
+
+		$.ajax({
+			type: 'POST'
+			, url: '/like/set_like/' + postId
+			, data: { 'userId': userId }
+			, success: function(data) {
+				if (data.result === true) {
+					//성공 시 새로고침
+					location.reload();
+				}
+			}
+		});
+	});
+
+	$('.post-item-action-button').on('click', '.timeline-pin-before-btn', function() {
+		//게시글 핀하기
+		$(this).removeClass('timeline-pin-before-btn');
+		$(this).addClass('timeline-pin-after-btn');
+		$(this).text('bookmark');
+
+		let postId = $(this).data('post-id');
+		$.ajax({
+			type: 'POST'
+			, url: '/pin/create_pin'
+			, data: { 'postId': postId }
+			, function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+		});
+	});
+						
+	$('.post-item-action-button').on('click', '.timeline-pin-after-btn', function() {
+		//게시글 핀 취소
+		let postId = $(this).data('post-id');
+		$.ajax({
+			type: 'POST'
+			, url: '/pin/create_pin'
+			, data: { 'postId': postId }
+			, function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+		});
+	});
+
+	$('.post-item-action-button').on('click', '.timeline-text-focus-btn', function() {
+		//말풍선 버튼 클릭시 코멘트 인풋에 포커스
+		let postId = $(this).data('post-id');
+		$('#timeLineCommentInput' + postId).focus();
+	});
+						
+	//타임라인과 comment modal 연결
+	$('.post-comment-view-section').on('focus', '.show-timeline-post-detail', function() {
+		$('.comment-modal-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+		let postId = $(this).data('post-id');
+		let userId = $(this).data('user-id');
+		let userLoginId = $(this).data('post-user-login-id');
+		$('.owner-id').text(userLoginId);
+
+		getCommentModalPost(postId, userId);
+	});
+						
+	$('.btn-box').on('click', '.timeline-comment-submit-btn', function() {
+		let postId = $(this).data('post-id');
+		let comment = $('#timeLineCommentInput' + postId).val();
+
+		if (comment == '') {
+			alert('내용을 입력해 주세요.');
+			return;
+		}
+		
+		$.ajax({
+			type: 'POST'
+			, data: {'postId': postId
+					, 'comment': comment
+			}
+			, url: '/comment/create_comment'
+			, success: function(data) {
+				if(data.loginCheck===true){
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+
+	});
+	
+	//-----------------detail-view
+	
+	$('.detail-like-before-btn').on('click', function() {
+		let postId = $(this).data('post-id');
+		let userId = $(this).data('post-user-id');
+
+		$.ajax({
+			type: 'POST'
+			, url: '/like/set_like/' + postId
+			, data: { 'userId': userId }
+			, success: function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+	});
+	
+	$('.detail-like-after-btn').on('click', function() {
+		let postId = $(this).data('post-id');
+		let userId = $(this).data('post-user-id');
+
+		$.ajax({
+			type: 'POST'
+			, url: '/like/set_like/' + postId
+			, data: { 'userId': userId }
+			, success: function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+	});
+	
+	$('.detail-pin-before-btn').on('click', function() {
+		let postId = $(this).data('post-id');
+		$.ajax({
+			type: 'POST'
+			, url: '/pin/create_pin'
+			, data: { 'postId': postId }
+			, success: function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+
+		});
+
+	});
+	
+	$('.detail-pin-after-btn').on('click', function() {
+		let postId = $(this).data('post-id');
+		$.ajax({
+			type: 'POST'
+			, url: '/pin/delete_pin'
+			, data: { 'postId': postId }
+			, success: function(data) {
+				if (data.result === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+	
+		});
+	});
+			
+	$('.detail-text-focus-btn').on('click', function() {
+		$('.detail-comment-form').focus();
+	});
+	
+	$('.detail-comment-submit-btn').on('click', function() {
+		let postId = $(this).data('post-id');
+		let comment = $('.detail-comment-form').val();
+	
+		if (comment == '') {
+			alert('내용을 입력하세요.');
+			return;
+		}
+	
+		$.ajax({
+			type: 'POST'
+			, url: '/comment/create_comment'
+			, data: {
+				'postId': postId
+				, 'comment': comment
+			}
+			, success: function(data) {
+				if (data.loginCheck === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+				alert('실패?')
+			}
+	
+		});
+	});
+			
+	$('.comment-item').on('click', '.detail-comment-menu-btn', function() {
+		let commentId = $(this).data('comment-id');
+		let postId = $(this).data('post-id');
+		$('.detail-comment-description-modal').removeClass('d-none');
+		$('.detail-comment-delete-button').data('comment-id', commentId);
+		$('.detail-comment-delete-button').data('post-id', postId);
+		$('body').addClass('no-scrollbar');
+
+	});
+
+	$('.detail-comment-description-modal').on('click', function(e) {
+		if (!$('.menu-modal-box').has(e.target).length) {
+
+			$('.detail-comment-description-modal').addClass('d-none');
+			//comment-modal-section에 d-none클래스가 없다면 --보이고있다면
+			if ($('.comment-modal-section').hasClass('d-none') === true) {
+				$('body').removeClass('no-scrollbar');
+			}
+		}
+	});
+			
+	$('.detail-comment-delete-button').on('click', function() {
+		let commentId = $(this).data('comment-id');
+		let postId = $(this).data('post-id');
+	
+		$.ajax({
+			type: 'POST'
+			, url: '/comment/delete_comment'
+			, data: {
+				'commentId': commentId
+				, 'postId': postId
+			}
+			, success: function(data) {
+				if (data.loginCheck === true) {
+					location.reload();
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+	});
+	
+	$('.like-link').on('click', function(e) {
+		e.preventDefault();
+		$('.like-modal-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+		let postId = $(this).data('post-id');
+		$.ajax({
+			type: 'GET'
+			, url: '/like/get_like_list'
+			, data: { 'postId': postId }
+			, success: function(data) {
+				if (data.loginCheck === true) {
+					createLikeList(data.loginCheck, data.likeList, data.followingList);
+				} else {
+					location.href = '/user/sign_in_view';
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+	});
+	
+	//-------------------------------gnb
+	$('.alert-modal-follow-btn-box').on('click', '.alert-modal-unfollow-btn', function() {
+		let sendUserId = $(this).data('send-user-id');
+		let sendUserProfileImagePath = $(this).data('send-user-profile-image');
+		let sendUserLoginId = $(this).data('send-user-login-id');
+
+
+		$('.alert-follow-delete-section').removeClass('d-none');
+		$('body').addClass('no-scrollbar');
+
+		let profileImagePath = sendUserProfileImagePath == '' ? '/static/images/no_profile_image.png' : sendUserProfileImagePath;
+
+		$('.alert-delete-user-image').attr('src', profileImagePath);
+		$('.unfollow-userId').text(sendUserLoginId);
+
+
+		$('.alert-delete-btn').data('send-user-id', sendUserId);
+		$('.alert-delete-btn').data('send-user-profile-image', sendUserProfileImagePath);
+		$('.alert-delete-btn').data('send-user-login-id', sendUserLoginId);
+
+
+	});
+								
+	$('.alert-delete-btn').on('click', function() {
+
+		let sendUserId = $(this).data('send-user-id');
+		let sendUserProfileImagePath = $(this).data('send-user-profile-image');
+		let sendUserLoginId = $(this).data('send-user-login-id');
+
+		$.ajax({
+			type: 'POST'
+			, data: { 'followId': sendUserId }
+			, url: '/follow/do_unfollow'
+			, success: function(data) {
+				if (data.loginCheck === true) {
+					$('#alertModalFollowBtnBox' + sendUserId).empty();
+
+					let html = '<button class="alert-modal-follow-btn" data-send-user-id="' + sendUserId
+						+ '" data-send-user-profile-image="' + sendUserProfileImagePath
+						+ '" data-send-user-login-id="' + sendUserLoginId + '">팔로잉</button>';
+
+					$('#alertModalFollowBtnBox' + sendUserId).append(html);
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+
+		$('.alert-follow-delete-section').addClass('d-none');
+		$('body').removeClass('no-scrollbar');
+
+	});
+
+	$('.alert-modal-follow-btn-box').on('click', '.alert-modal-follow-btn', function() {
+		let sendUserId = $(this).data('send-user-id');
+		let sendUserProfileImagePath = $(this).data('send-user-profile-image');
+		let sendUserLoginId = $(this).data('send-user-login-id');
+
+		$.ajax({
+			type: 'POST'
+			, data: { 'followId': sendUserId }
+			, url: '/follow/do_follow'
+			, success: function(data) {
+				if (data.loginCheck === true) {
+					$('#alertModalFollowBtnBox' + sendUserId).empty();
+
+					let html = '<button class="alert-modal-unfollow-btn"data-send-user-id="' + sendUserId
+						+ '" data-send-user-profile-image="' + sendUserProfileImagePath
+						+ '" data-send-user-login-id="' + sendUserLoginId + '">팔로잉</button>';
+
+					$('#alertModalFollowBtnBox' + sendUserId).append(html);
+				}
+			}
+			, error: function(e) {
+				alert(e);
+			}
+		});
+	});
+
+	$('.alert-cancel-btn').on('click', function() {
+		$('.alert-follow-delete-section').addClass('d-none');
+		$('body').removeClass('no-scrollbar');
+	});
+
+	$('.alert-follow-delete-section').on('click', function(e) {
+		if (!$('.alert-follow-delete-box').has(e.target).length) {
+			$('.alert-follow-delete-section').addClass('d-none');
+			$('body').removeClass('no-scrollbar');
+		}
+	});
+	
 	
 	//1.타임라인 이모지피커
-	$('.timeline-emoji-picker').on('click',function(){
-		let buttonId='#post-emoji-picker';
-		let inputClass=".comment-form";
+	$('.post-comment-bar').on('click','.timeline-emoji-picker',function(){
+		let postId=$(this).data('post-id');
+		let buttonId='#post-emoji-picker'+postId;
+		let inputClass="#timeLineCommentInput"+postId;
 		//이모지 피커 함수 호출
 		setPicker(buttonId,inputClass);
 	});
@@ -1303,8 +1716,4 @@ $(document).ready(function(){
 			setPicker(buttonId,inputClass);
 	});
 	
-});
-
-
-
-		
+});	

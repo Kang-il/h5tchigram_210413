@@ -50,7 +50,22 @@
  			`id`
  		DESC
  	</select>
- 	
+ 	 
+ 	 <select id="selectPostThumbnailForDetailViewByUserId" parameterType="int" resultType="com.h5tchigram.post.model.PostThumbnail">
+ 		SELECT
+ 			`id` AS `postId`
+ 			,`userId`
+ 			,`contentType`
+ 			,`imagePath`
+ 		FROM
+ 			`post`
+ 		WHERE 
+ 			`userId`=#{userId}
+ 		ORDER BY
+ 			`id`
+ 		DESC
+ 		LIMIT 6
+ 	</select>
  		
  	<select id="selectPostThumbnailByPostId" parameterType="int" resultType="com.h5tchigram.post.model.PostThumbnail">
 	 	SELECT
@@ -73,7 +88,7 @@
  			`userId`=#{ownerId}
  	</select>
  	
- 	<insert id="insertPost" parameterType="map">
+ 	<insert id="insertPost" parameterType="com.h5tchigram.post.model.Post" useGeneratedKeys="true" keyProperty="id">
  	
  		INSERT INTO
  			`post`

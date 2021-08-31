@@ -378,6 +378,11 @@ header .header-nav-box .icon-item{
 
 .timeline-section .post-item-box .post-item-action-button{
 	display: flex;
+	justify-content: space-between;
+}
+.timeline-section .post-item-box .post-item-action-button div{
+	display: flex;
+	margin-right:15px;
 }
 
 .timeline-section .post-item-box .post-item-action-button button{
@@ -393,10 +398,10 @@ header .header-nav-box .icon-item{
 }
 
 .timeline-section .post-item-box .post-item-action-button button:nth-child(1){
-	margin-left:13px;
+	margin-left:10px;
 }
 
-.timeline-section .post-item-box .post-item-action-button button:nth-child(2){
+.timeline-section .post-item-box .post-item-action-button .timeline-like-after-btn{
 	color:#ed4956;	
 	font-size:30px;
 	margin-left:13px;
@@ -457,6 +462,7 @@ header .header-nav-box .icon-item{
 	font-size: 14px;
 	margin-left:15px;
 	color:#8f8f8f;
+	margin-top:10px;
 }
 
 .timeline-section .post-item-box .comment-unit{
@@ -499,7 +505,7 @@ header .header-nav-box .icon-item{
 	outline: none;	
 }
 
-.timeline-section .post-item-box .post-comment-bar .comment-submit-btn{
+.timeline-section .post-item-box .post-comment-bar .timeline-comment-submit-btn{
 	font-size: 16px;
 	color:#0095f6;
 	font-weight:700;
@@ -507,7 +513,7 @@ header .header-nav-box .icon-item{
 	margin-right:10px;
 }
 
-.menu-modal-section{
+.menu-modal-section , .menu-modal-section-not-owner{
 	width:100%; height:100%;
 	background:rgba(0,0,0,0.5);
 	position: fixed ;
@@ -520,9 +526,18 @@ header .header-nav-box .icon-item{
 	z-index: 4;
 }
 
-.menu-modal-section .menu-modal-box{
+.menu-modal-section .menu-modal-box {
 	width:370px;
-	height:260px;
+	height:150px;
+	border-radius:10px;
+	background-color: white;
+	position:fixed;
+	z-index: 5;
+}
+
+.menu-modal-section-not-owner .menu-modal-box-not-owner{
+	width:370px;
+	height:100px;
 	border-radius:10px;
 	background-color: white;
 	position:fixed;
@@ -530,7 +545,32 @@ header .header-nav-box .icon-item{
 		
 }
 
+.menu-modal-section-not-owner div{
+	text-align: center;
+}
+.menu-modal-section-not-owner .menu-modal-box-not-owner .modal-menu-item{
+	color: black;
+	font-size: 14px;
+	width:100%;
+	height:50px;
+	display: flex;
+	align-items: center;
+	justify-content:center;
+}
+.menu-modal-section-not-owner .menu-modal-box-not-owner .cancel-modal{
+	cursor: pointer;
+}
+.menu-modal-section-not-owner .menu-modal-box-not-owner hr{
+	margin:0;
+}
+.menu-modal-section-not-owner .menu-modal-box-not-owner .modal-menu-item a{
+	width:370px;
+	color:black;
+}
 
+.go-to-post-link:hover{
+	text-decoration: none;
+}
 
 .like-modal-section{
 	width:100%; height:100%;
@@ -652,7 +692,6 @@ header .header-nav-box .icon-item{
 .menu-modal-section .menu-modal-box .modal-menu-item a{
 	width:370px;
 	color:black;
-	
 }
 .comment-delete-button{
 	cursor:pointer;
@@ -694,7 +733,8 @@ header .header-nav-box .icon-item{
 }
 
 .timeline-section .post-item-box .post-item-profile-section{
-	margin-top:10px;
+	margin-top:20px;
+	margin-bottom:20px;
 	display: flex;
 	align-items: center;
 	
@@ -958,6 +998,62 @@ header .header-nav-box .icon-item{
 .comment-description-modal .menu-modal-box .modal-menu-item a:hover{
 	text-decoration: none;
 }
+
+.detail-comment-description-modal{
+	width:100%; height:100%;
+	background:rgba(0,0,0,0.5);
+	position: fixed ;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	z-index: 4;
+}
+
+.detail-comment-description-modal .menu-modal-box{
+	width:370px;
+	border-radius:10px;
+	background-color: white;
+	position:fixed;
+	z-index: 5;
+}
+
+.detail-comment-description-modal div{
+	text-align: center;
+}
+
+.detail-comment-description-modal .menu-modal-box .detail-modal-menu-item , .modal-menu-item{
+	color: black;
+	font-size: 14px;
+	width:100%;
+	height:50px;
+	display: flex;
+	align-items: center;
+	justify-content:center;
+}
+
+.detail-comment-description-modal .menu-modal-box .cancel-modal{
+	cursor: pointer;
+}
+
+.detail-comment-description-modal .menu-modal-box hr{
+	margin:0;
+}
+
+.detail-comment-description-modal .menu-modal-box .modal-menu-item a , .detail-modal-menu-item a{
+	width:370px;
+	color:black;
+}
+
+.detail-comment-description-modal .menu-modal-box .detail-modal-menu-item a:hover , .modal-menu-item a:hover{
+	text-decoration: none;
+}
+.detail-comment-delete-button{
+	cursor:pointer;
+}
+
 
 .comment-modal-section{
 	width:100%; height:100%;
@@ -1623,8 +1719,6 @@ header .header-nav-box .icon-item{
 	display: flex;	
 }
 
-
-
 .detail-content-description{
 	width:350px;
 }
@@ -1718,6 +1812,13 @@ header .header-nav-box .icon-item{
 .detail-content-des3 .action-button{
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+}
+
+.detail-content-des3 .action-button div{
+	display: flex;
+	align-items: center;
+	margin-right:10px;
 }
 
 .detail-content-des3 .action-button button{
@@ -1732,11 +1833,11 @@ header .header-nav-box .icon-item{
 	cursor: pointer; 	
 }
 
-.detail-content-des3 .action-button button:nth-child(1){
+.detail-content-des3 .action-button .detail-like-before-btn , .detail-like-after-btn{
 	margin-left:10px;
 }
 
-.detail-content-des3 .action-button button:nth-child(2){
+.detail-content-des3 .action-button .detail-like-after-btn{
 	color:#ed4956;	
 	font-size:30px;
 	margin-left:10px;
@@ -1813,7 +1914,7 @@ header .header-nav-box .icon-item{
 .more-contents-box .more-contents-row{
 	width:inherit;
 	display: flex;
-	justify-content: space-between;
+	
 }
 
 .more-contents-box .more-contents-unit{
@@ -1824,6 +1925,7 @@ header .header-nav-box .icon-item{
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	margin-right:55px;
 }
 
 .more-contents-unit .post-image{

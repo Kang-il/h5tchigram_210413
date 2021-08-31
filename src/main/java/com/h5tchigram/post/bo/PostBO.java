@@ -3,7 +3,8 @@ package com.h5tchigram.post.bo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List	;
+import java.util.List;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.h5tchigram.comment.bo.CommentBO;
 import com.h5tchigram.comment.model.Comment;
 import com.h5tchigram.common.FileManagerService;
+import com.h5tchigram.follow.bo.FollowBO;
+
 import com.h5tchigram.like.bo.LikeBO;
 import com.h5tchigram.like.model.Like;
-import com.h5tchigram.pin.bo.pinBO;
+import com.h5tchigram.pin.bo.PinBO;
 import com.h5tchigram.pin.model.Pin;
 import com.h5tchigram.post.dao.PostDAO;
 import com.h5tchigram.post.model.Post;
 import com.h5tchigram.post.model.PostThumbnail;
+import com.h5tchigram.timeline.bo.TimeLineBO;
+import com.h5tchigram.timeline.model.TimeLine;
 import com.h5tchigram.user.bo.UserBO;
 import com.h5tchigram.user.model.User;
 
@@ -41,9 +46,13 @@ public class PostBO {
 	@Autowired
 	private CommentBO commentBO;
 	@Autowired
-	private pinBO pinBO;
+	private PinBO pinBO;
 	@Autowired
 	private UserBO userBO;
+	@Autowired
+	private TimeLineBO timeLineBO;
+	@Autowired
+	private FollowBO followBO;
 	
 	//포스트 리스트를 가져옴
 	public List<Post> getPostListByPostOwnerId(int ownerId){
@@ -116,6 +125,33 @@ public class PostBO {
 		return postThumbnailList;
 	}
 	
+	public List<PostThumbnail> getPostThumbnailForDetailViewByUserId(int userId){
+		List<PostThumbnail> postThumbnailList=postDAO.selectPostThumbnailForDetailViewByUserId(userId);
+		for(PostThumbnail post:postThumbnailList) {
+			post.setLikeCount(likeBO.getLikeCountByPostId(post.getPostId()));
+			post.setCommentCount(commentBO.getCommentCountByPostId(post.getPostId()));
+		}
+		return postThumbnailList;
+	}
+	
+	public List<Post> getPostListByTimeLine(int userId){
+		List<Post> postList=new ArrayList<>();
+		//1.유저 아이디로 내가 팔로우 하는 유저아이디를 모두 가져옴
+		List<Integer> followList =followBO.getFollowerOnlyUserId(userId);
+		//타임라인에 나의아이디도 넣어 같이 추가해줄 것
+		followList.add(userId);
+		//2.내가 팔로우한 유저들을 기준으로 타임라인 리스트를 가져옴
+		List<TimeLine> timeLineList=timeLineBO.getTimeLineListByUserIdList(followList);
+		
+		
+		for(TimeLine timeLine : timeLineList) {
+			//타임라인리스트에서 타임라인에 저장되어있는 postId로 순서대로 post를 가져온다
+			postList.add(getPostById(timeLine.getPostId()));
+		}
+		
+		return postList;
+	}
+	
 	public int getPostCount(int ownerId) {
 		return postDAO.selectPostCountByUserId(ownerId);
 	}
@@ -124,6 +160,7 @@ public class PostBO {
 		//사진 타입만 받도록 해준다
 		String contentType="photo";
 		String imageUrl=null;
+		
 		
 		//filed업로드 후  image URL을 반환받아 DB에 넣을 인자값으로 구성.
 		
@@ -134,16 +171,33 @@ public class PostBO {
 			logger.debug(e.getMessage());
 		}
 		
+		Post post=new Post();
+		post.setUserId(userId);
+		post.setContent(content);
+		post.setContentType(contentType);
+		post.setImagePath(imageUrl);
 		
+		int row = postDAO.insertPost(post);
 		
-		return postDAO.insertPost(userId,contentType,content,imageUrl);
+		//타임라인 추가
+		timeLineBO.insertTimeLine(post.getId(), userId);
+		
+		if(row == 1) {
+			
+		}
+		
+		return row;
 	}
 	
 	public void deletePost(int postId , int userId) {
 		Post post= postDAO.selectPostByPostId(postId);
 		
 		if(userId == post.getUserId()) {
+			
 			postDAO.deletePost(postId);
+			
+			//타임라인 삭제
+			timeLineBO.deleteTimeLineByPostId(postId);
 			
 			//1. 파일 삭제
 			try {

@@ -80,7 +80,6 @@
 						<button type="button" class="material-icons-outlined d-none modal-like-before-btn" id="modalLikeBeforeBtn">favorite_border</button>
 						<button type="button" class="material-icons-outlined d-none modal-like-after-btn" id="modalLikeAfterBtn">favorite</button>
 						<button type="button" class="material-icons-outlined action-text-focus-btn">textsms</button>
-						<button type="button" class="material-icons-outlined icon-item"> email </button>
 					</div>
 					<div>
 						<button type="button" class="material-icons-outlined modal-pin-before-btn" >bookmark_border</button>
@@ -113,7 +112,7 @@
 				</div>
 				
 				<div class="btn-box">
-					<button type="button" class="comment-submit-btn" id="hi">게시</button>
+					<button type="button" class="comment-submit-btn">게시</button>
 				</div>
 				
 			</div>
